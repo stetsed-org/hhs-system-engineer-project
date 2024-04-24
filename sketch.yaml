@@ -1,0 +1,13 @@
+default_fqbn: pololu-a-star:avr:a-star32U4
+
+profiles:
+  zumo:
+    notes: "For the Zumo"
+    fqbn: pololu-a-star:avr:a-star32U4
+    platforms:
+      - platform: pololu-a-star:avr (5.1.0)
+        platform_index_url: https://files.pololu.com/arduino/package_pololu_index.json
+      - platform: arduino:avr (1.8.6)
+    libraries:
+      - Arduino_BuiltIn (1.0.0)
+      - Zumo32U4 (2.0.1)

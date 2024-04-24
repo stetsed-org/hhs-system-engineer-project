@@ -1,1 +1,0 @@
-USBPause	KEYWORD1
