@@ -1,3 +1,4 @@
+```cpp
 #include <iostream>
 #include <string>
 
@@ -31,3 +32,4 @@ int main() {
   // Return a error code, 0 = success, 0 < some form of fail
   return 0;
 }
+```
