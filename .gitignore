@@ -33,3 +33,6 @@
 
 # BUild
 build/*
+
+# Ignore vscode
+.vsode/*
