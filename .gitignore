@@ -35,4 +35,4 @@
 build/*
 
 # Ignore vscode
-.vsode/*
+.vscode/*
