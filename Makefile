@@ -10,3 +10,6 @@ BOARD_TYPE ?= pololu-a-star:avr
 
 compile:
 	/usr/bin/arduino-cli compile -v --profile zumo --build-path="./build/" $(PWD)
+
+compile-windows:
+	C:\Program Files\arduino-cli.exe compile -v --profile zumo-windows --build-path="./build/" $(PWD)
