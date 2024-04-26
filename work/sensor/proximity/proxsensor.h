@@ -1,4 +1,4 @@
-#include "headers.hpp"
+#include "Zumo32U4ProximitySensors.h"
 
 class proxSensor {
 public:
@@ -6,7 +6,12 @@ public:
   // sensor
   proxSensor(bool);
 
+  bool basicRead();
+  int deepRead();
+
 private:
   bool _enableAll;
   Zumo32U4ProximitySensors _proxSensor;
 };
+
+#include "proxsensor.cpp"
