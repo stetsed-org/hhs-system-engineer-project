@@ -1,6 +1,9 @@
 #include <Arduino.h>
 #include "work/ran-func.cpp"
 #include "work/serial/serial.cpp"
+#include "work/sensor/compass/accelerometer/accel.cpp"
+#include "work/sensor/compass/gyroscope/gyro.cpp"
+#include "work/sensor/compass/magnetometer/magnet.cpp"
 
 int test = 0;
 int speed = 0;
