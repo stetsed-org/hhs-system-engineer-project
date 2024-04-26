@@ -4,7 +4,7 @@
 class Gyroscope : public CompassBase {
 	using CompassBase::CompassBase;
 
-	protected:
+	private:
 		void _retrieveData() override;
 };
 
