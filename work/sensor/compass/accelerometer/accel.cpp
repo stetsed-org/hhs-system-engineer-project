@@ -1,7 +1,3 @@
-#include "../../../headers.hpp"
-#include "accel.h"
-
-
 void Accelerometer::_retrieveData() {
 	if (_interface.accDataReady()) 
 	{

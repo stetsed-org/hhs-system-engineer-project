@@ -1,7 +1,3 @@
-#include "../../../headers.hpp"
-#include "magnet.h"
-
-
 void Magnetometer::_retrieveData() {
 	if (_interface.magDataReady())
 	{

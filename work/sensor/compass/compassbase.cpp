@@ -1,14 +1,21 @@
-#include "../../headers.hpp"
-#include "compassbase.h"
+CompassBase::CompassBase(): _vector{0, 0, 0} {  }
 
-
-CompassBase::CompassBase(): _vector.x(0), _vector.y(0), _vector.z(0) { _interface.init(); }
-
+void CompassBase::_retrieveData() {
+	return;
+}
 Vector3 CompassBase::Values() {
 	
-	this._retrieveData();
+	this->_retrieveData();
 
 	return _vector;
 }
 
+void CompassBase::Initialize() {
+	if (_interface.init())
+	{
+		Serial1.println("Compass interface initialized successfully!");
+	} else {
+		Serial1.println("Compass interface initialized successfully?");
+	}
+}
 // written by: Erynn 'foorpyxof' Scholtes | 2024 NSE Zumo project

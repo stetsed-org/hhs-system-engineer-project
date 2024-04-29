@@ -1,7 +1,3 @@
-#include "../../../headers.hpp"
-#include "gyro.h"
-
-
 void Gyroscope::_retrieveData() {
 	if (_interface.gyroDataReady())
 	{

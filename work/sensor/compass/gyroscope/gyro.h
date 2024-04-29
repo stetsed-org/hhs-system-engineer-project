@@ -1,11 +1,19 @@
 #include "../../../headers.hpp"
 #include "../compassbase.h"
 
-class Gyroscope : public CompassBase {
-	using CompassBase::CompassBase;
+#ifndef GYRO_H
+#define GYRO_H
 
+class Gyroscope : private CompassBase {
 	private:
 		void _retrieveData() override;
+	public:
+		using CompassBase::CompassBase;
+		using CompassBase::Values;
 };
+
+#include "gyro.cpp"
+
+#endif
 
 // written by: Erynn 'foorpyxof' Scholtes | 2024 NSE Zumo project
