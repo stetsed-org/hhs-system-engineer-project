@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <stdarg.h>
 #include "work/ran-func.cpp"
 #include "work/serial/serial.cpp"
 #include "work/sensor/proximity/proxsensor.h"
@@ -13,11 +14,16 @@ int count = 0;
 
 auto& xbee = Serial;
 
-proxSensor proximity = proxSensor(false);
+// Proxmity Sensor Setup
+Zumo32U4ProximitySensors proxzumo;
+proxSensor proximity;
 
 void setup() {
   Serial1.begin(4800);
   Serial1.println("Zumo Active, Serial1 Output");
+  proxzumo.initFrontSensor();
+  proximity = proxSensor(proxzumo);
+
 
   xbee.begin(4800);
   
@@ -37,8 +43,12 @@ void loop() {
   //  readserial(test,speed);
   //}
 
-  if(count <= 20){
-      proximity.basicRead();
+  if(count <= 10){
+      bool close = proximity.basicReadClose();
+
+      String closetext = close ? "true" : "false"; 
+      
+      Serial1.println("Something is close: " + closetext);
       count += 1;
     }
 }

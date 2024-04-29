@@ -3,27 +3,31 @@
 #include "HardwareSerial.h"
 #include <Arduino.h>
 
-proxSensor::proxSensor(bool a) : _enableAll(a) {
-  if (_enableAll) {
-    Zumo32U4ProximitySensors _proxSensor = Zumo32U4ProximitySensors(); 
-    _proxSensor.initThreeSensors();
-  } else {
-    uint8_t pins[] = "22";
-    Zumo32U4ProximitySensors _proxSensor = Zumo32U4ProximitySensors();
-    _proxSensor.init(pins,1,11);
-  }
+// Initialize for Global Variable
+proxSensor::proxSensor() {
 }
 
-bool proxSensor::basicRead() {
-  Serial1.println("Hello" + String(_proxSensor.getNumSensors()));
+// Initialize while giving it the ZumoProxmitySensor which has to be preinitialized
+proxSensor::proxSensor(Zumo32U4ProximitySensors a) : _proxSensor(a) {
+
+}
+
+bool proxSensor::basicReadClose() {
+  //Serial1.println("Number of Sensors Active: " + String(_proxSensor.getNumSensors()));
   _proxSensor.read();
   int leftled = _proxSensor.countsFrontWithLeftLeds();
   int rightled = _proxSensor.countsFrontWithRightLeds();
 
-  Serial1.println("DT: " + String(leftled) + String(rightled));
+  Serial1.println("Data L: " + String(leftled));
+  Serial1.println("Data R: " + String(rightled));
 
-  return true;
-  
+  if (leftled > 4 && rightled > 4){
+    return true;
+  }
+  else {
+    return false;
+  }
+
 }
 
 int proxSensor::deepRead() {

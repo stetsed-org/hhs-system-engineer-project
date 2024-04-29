@@ -2,15 +2,17 @@
 
 class proxSensor {
 public:
-  // Boolean input, if it is true enable all sensors, if false enable front
-  // sensor
-  proxSensor(bool);
+  // Empty Initialize
+  proxSensor();
 
-  bool basicRead();
+  // Pass through sensor
+  proxSensor(Zumo32U4ProximitySensors);
+
+  // Basic read, 
+  bool basicReadClose();
   int deepRead();
 
 private:
-  bool _enableAll;
   Zumo32U4ProximitySensors _proxSensor;
 };
 
