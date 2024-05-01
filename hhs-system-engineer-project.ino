@@ -1,6 +1,9 @@
+#define __AVR_ATmega32U4__
 #include <Arduino.h>
 #include "work/ran-func.cpp"
 #include "work/serial/serial.cpp"
+
+#include "work/sensor/encoders/encoders.cpp"
 
 int test = 0;
 int speed = 0;
@@ -13,6 +16,8 @@ auto& xbee = Serial;
 void setup() {
   Serial1.begin(4800);
   Serial1.println("Zumo Active, Serial1 Output");
+
+  EncoderInit();
 
   xbee.begin(4800);
   
@@ -31,5 +36,6 @@ void loop() {
   if(Serial1.available()){
     readserial(test,speed);
   }
+  Serial1.println(EncoderLeft.ReadValue());
 }
 
