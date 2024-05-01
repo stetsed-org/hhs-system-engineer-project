@@ -18,8 +18,10 @@ bool proxSensor::basicReadClose() {
   int leftled = _proxSensor.countsFrontWithLeftLeds();
   int rightled = _proxSensor.countsFrontWithRightLeds();
 
+  if (debug) {
   Serial1.println("Data L: " + String(leftled));
   Serial1.println("Data R: " + String(rightled));
+  }
 
   if (leftled > 4 && rightled > 4){
     return true;

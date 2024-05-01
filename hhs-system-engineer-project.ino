@@ -1,13 +1,15 @@
-#include <Arduino.h>
-#include <stdarg.h>
-#include "work/ran-func.cpp"
-#include "work/serial/serial.cpp"
-#include "work/sensor/proximity/proxsensor.h"
+bool debug = true;
 
 int test = 0;
 int speed = 0;
 
 int count = 0;
+
+#include <Arduino.h>
+#include <stdarg.h>
+#include "work/ran-func.cpp"
+#include "work/serial/serial.cpp"
+#include "work/sensor/proximity/proxsensor.h"
 
 #define RECHTS OCR1A
 #define LINKS OCR1B
@@ -42,14 +44,5 @@ void loop() {
   //if(Serial1.available()){
   //  readserial(test,speed);
   //}
-
-  if(count <= 10){
-      bool close = proximity.basicReadClose();
-
-      String closetext = close ? "true" : "false"; 
-      
-      Serial1.println("Something is close: " + closetext);
-      count += 1;
-    }
 }
 
