@@ -1,10 +1,10 @@
 void Gyroscope::_retrieveData() {
-	if (_interface.gyroDataReady())
+	if (_interfacePTR->gyroDataReady())
 	{
-		_interface.readGyro();
-		_vector.x = _interface.g.x;
-		_vector.y = _interface.g.y;
-		_vector.z = _interface.g.z;
+		_interfacePTR->readGyro();
+		_vector.x = _interfacePTR->g.x;
+		_vector.y = _interfacePTR->g.y;
+		_vector.z = _interfacePTR->g.z;
 	}
 }
 

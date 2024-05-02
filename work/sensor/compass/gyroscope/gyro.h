@@ -10,6 +10,7 @@ class Gyroscope : private CompassBase {
 	public:
 		using CompassBase::CompassBase;
 		using CompassBase::Values;
+		using CompassBase::PrintDebugInfo;
 };
 
 #include "gyro.cpp"

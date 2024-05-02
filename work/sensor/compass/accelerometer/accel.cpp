@@ -1,10 +1,10 @@
 void Accelerometer::_retrieveData() {
-	if (_interface.accDataReady()) 
+	if (_interfacePTR->accDataReady()) 
 	{
-		_interface.readAcc();
-		_vector.x = _interface.a.x;
-		_vector.y = _interface.a.y;
-		_vector.z = _interface.a.z;
+		_interfacePTR->readAcc();
+		_vector.x = _interfacePTR->a.x;
+		_vector.y = _interfacePTR->a.y;
+		_vector.z = _interfacePTR->a.z;
 	}
 }
 

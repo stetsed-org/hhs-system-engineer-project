@@ -10,6 +10,7 @@ class Magnetometer : private CompassBase {
 	public:
 		using CompassBase::CompassBase;
 		using CompassBase::Values;
+		using CompassBase::PrintDebugInfo;
 };
 
 #include "magnet.cpp"
