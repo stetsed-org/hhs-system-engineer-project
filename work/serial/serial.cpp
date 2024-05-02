@@ -20,7 +20,7 @@ test = Serial1.read();
         Serial1.println(speed);
         break;
 
-      case 1:
+      case '1':
         speed = 128;
         OCR1B = speed;
         RECHTS = speed;
