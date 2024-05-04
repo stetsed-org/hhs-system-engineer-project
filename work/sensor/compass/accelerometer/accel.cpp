@@ -1,10 +1,10 @@
-void Accelerometer::_retrieveData() {
-	if (_interfacePTR->accDataReady()) 
+void Accelerometer::pvt_RetrieveData() {
+	if (m_InterfacePTR->accDataReady()) 
 	{
-		_interfacePTR->readAcc();
-		_vector.x = _interfacePTR->a.x;
-		_vector.y = _interfacePTR->a.y;
-		_vector.z = _interfacePTR->a.z;
+		m_InterfacePTR->readAcc();
+		m_Vector.x = m_InterfacePTR->a.x;
+		m_Vector.y = m_InterfacePTR->a.y;
+		m_Vector.z = m_InterfacePTR->a.z;
 	}
 }
 

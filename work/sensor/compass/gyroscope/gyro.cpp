@@ -1,10 +1,10 @@
-void Gyroscope::_retrieveData() {
-	if (_interfacePTR->gyroDataReady())
+void Gyroscope::pvt_RetrieveData() {
+	if (m_InterfacePTR->gyroDataReady())
 	{
-		_interfacePTR->readGyro();
-		_vector.x = _interfacePTR->g.x;
-		_vector.y = _interfacePTR->g.y;
-		_vector.z = _interfacePTR->g.z;
+		m_InterfacePTR->readGyro();
+		m_Vector.x = m_InterfacePTR->g.x;
+		m_Vector.y = m_InterfacePTR->g.y;
+		m_Vector.z = m_InterfacePTR->g.z;
 	}
 }
 

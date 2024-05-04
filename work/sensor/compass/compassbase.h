@@ -14,11 +14,11 @@ struct Vector3 { int16_t x,y,z; };	/* the struct containing three
 // is abstract class :3c
 class CompassBase {
 	protected:
-		Vector3 _vector; // the Vector3 struct (x,y,z) that holds
+		Vector3 m_Vector; // the Vector3 struct (x,y,z) that holds
 				 // the data that has been read
 		
 		// the object that allows us to interface with the IMU-sensors
-		Zumo32U4IMU* _interfacePTR;	// it contains methods to read raw values
+		Zumo32U4IMU* m_InterfacePTR;	// it contains methods to read raw values
 					// as well as three containers to
 					// temporarily  store them in;
 					// 
@@ -31,12 +31,11 @@ class CompassBase {
 					// their respective derived-classes
 		
 	private:
-		virtual void _retrieveData() = 0;	// template method that will make
+		virtual void pvt_RetrieveData() = 0;	// template method that will make
 						// the derived class read from
 						// its respective sensor
 	
 	public: 
-		CompassBase();	// empty constructor. shouldn't use. no worky.
 		CompassBase(Zumo32U4IMU*);	// constructor that's gonna be inherited
 			       					// by all derived classes
 			       					// (accel, gyro, magnet)

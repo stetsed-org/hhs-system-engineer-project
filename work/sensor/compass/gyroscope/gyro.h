@@ -6,7 +6,7 @@
 
 class Gyroscope : private CompassBase {
 	private:
-		void _retrieveData() override;
+		void pvt_RetrieveData() override;
 	public:
 		using CompassBase::CompassBase;
 		using CompassBase::Values;
