@@ -39,3 +39,6 @@ build/*
 
 # .vim session files
 *.vim
+
+# doxygen output
+_doxygen/*

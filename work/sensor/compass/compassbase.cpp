@@ -1,19 +1,11 @@
-CompassBase::CompassBase(Zumo32U4IMU* ifacePTR): m_Vector{0, 0, 0}, m_InterfacePTR(ifacePTR) {  }
+CompassBase::CompassBase(Zumo32U4IMU* zumoInterfacePTR): m_Vector{0, 0, 0}, m_InterfacePTR(zumoInterfacePTR) {  }
 
 Vector3 CompassBase::Values() {
 	
+	// call pvt_RetrieveData to place sensor reading in m_Vector
 	this->pvt_RetrieveData();
 
 	return m_Vector;
-}
-
-void CompassBase::Initialize() {
-	if (m_InterfacePTR->init())
-	{
-		Serial1.println("Compass interface initialized successfully!");
-	} else {
-		Serial1.println("Compass interface initialized successfully?");
-	}
 }
 
 void CompassBase::PrintDebugInfo() {
