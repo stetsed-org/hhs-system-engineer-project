@@ -19,6 +19,7 @@ proxSensor::proxSensor(Zumo32U4ProximitySensors a) : pvt_proxSensor(a) {
 
 /** Perform a basic read
  *  Returns back Boolean if >= 50(?)cm in distance, otherwise return false.
+ *  Uses the default Zumo32U4ProximitySensors.read function provided by 32U4 library.
  *  If debug global var is true, shall return number of sensors active and the raw data to Serial1 
 */
 bool proxSensor::basicReadClose() {
