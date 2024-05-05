@@ -36,3 +36,6 @@ build/*
 
 # Ignore vscode
 .vsode/*
+
+# Doxygen Artifacts
+.doxygen/*

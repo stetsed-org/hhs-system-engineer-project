@@ -5,13 +5,22 @@
 */
 class proxSensor {
 public:
-  // Empty Initialize
+  /** proxSensor constructor without input 
+    * Only used within global variable decleration, not used outside. 
+  */
   proxSensor();
 
-  // Initialize Class with an instacen of the Proximity Sensor Class Zumo32U4ProximitySensors
+  /** proxSensor constructor with Proximity Sensor Instance
+    * Get's given an instance of Zumo32U4ProximitySensors, due to issues when
+    * initializing inside of the Constructor itself.
+  */
   proxSensor(Zumo32U4ProximitySensors);
 
-  // Basic read, returns boolean if closer than 50(?)cm infront of the Zumo
+  /** Perform a basic read
+    *  Returns back Boolean if >= 50(?)cm in distance, otherwise return false.
+    *  Uses the default Zumo32U4ProximitySensors.read function provided by 32U4 library.
+    *  If debug global var is true, shall return number of sensors active and the raw data to Serial1 
+  */
   bool basicReadClose();
   // Advanced Read, currently unused, possibly will return int of distance if able to acces > 1 prox sensor and/or read analog data.
   int deepRead();
