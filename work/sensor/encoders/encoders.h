@@ -6,7 +6,7 @@ class Encoder
         int ReadValue();
         void ResetEncoder();
         void SetEncoder(int);
-        void ValueAdd1();
+        void ValueAdd1(); 
         void ValueSub1();
         void ValueAddNumber(int);
         void ValueSubNumber(int);
