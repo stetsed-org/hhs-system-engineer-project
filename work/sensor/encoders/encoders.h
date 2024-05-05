@@ -6,16 +6,16 @@ class Encoder
         int ReadValue();
         void ResetEncoder();
         void SetEncoder(int);
-        void ValueAdd1(); 
+        void ValueAdd1();
         void ValueSub1();
         void ValueAddNumber(int);
         void ValueSubNumber(int);
         void LEFTEncoderLogic();
         void RIGHTEncoderLogic();
     private:
-        int _EncoderValue;
-        bool _PrevValueA;
-        bool _PrevValueB;
-        bool _ValueA;
-        bool _ValueB;
+        int EncoderValue;
+        bool PrevValueA;
+        bool PrevValueB;
+        bool ValueA;
+        bool ValueB;
 };

@@ -13,7 +13,7 @@
 
 
 
-Encoder::Encoder(bool EncoderisLeft):_ValueA(0),_ValueB(0),_EncoderValue(0),_PrevValueA(0),_PrevValueB(0)
+Encoder::Encoder(bool EncoderisLeft):ValueA(0),ValueB(0),EncoderValue(0),PrevValueA(0),PrevValueB(0)
 {
     if (EncoderisLeft)
     {
@@ -29,54 +29,54 @@ Encoder::Encoder(bool EncoderisLeft):_ValueA(0),_ValueB(0),_EncoderValue(0),_Pre
 
 int Encoder::ReadValue()
 {
-    return _EncoderValue;
+    return EncoderValue;
 }
 
 
 void Encoder::ResetEncoder()
 {
-    _EncoderValue = 0;
+    EncoderValue = 0;
 }
 void Encoder::SetEncoder(int Number)
 {
-    _EncoderValue = Number;
+    EncoderValue = Number;
 }
 void Encoder::ValueAdd1()
 {
-    _EncoderValue++;
+    EncoderValue++;
 }
 void Encoder::ValueSub1()
 {
-    _EncoderValue--;
+    EncoderValue--;
 }
 void Encoder::ValueAddNumber(int Number)
 {
-    _EncoderValue += Number;
+    EncoderValue += Number;
 }
 void Encoder::ValueSubNumber(int Number)
 {
-    _EncoderValue -= Number;
+    EncoderValue -= Number;
 }
 void Encoder::LEFTEncoderLogic()
 {  
-    _ValueB = FastGPIO::Pin<LEFT_B>::isInputHigh();
-    _ValueA = FastGPIO::Pin<LEFT_XOR>::isInputHigh() ^ _ValueB;
+    ValueB = FastGPIO::Pin<LEFT_B>::isInputHigh();
+    ValueA = FastGPIO::Pin<LEFT_XOR>::isInputHigh() ^ ValueB;
 
-    _EncoderValue += (_ValueA ^ _PrevValueB) - (_PrevValueA ^ _ValueB);
+    EncoderValue += (ValueA ^ PrevValueB) - (PrevValueA ^ ValueB);
 
-    _PrevValueA = _ValueA;
-    _PrevValueB = _ValueB;
+    PrevValueA = ValueA;
+    PrevValueB = ValueB;
 }
 
 void Encoder::RIGHTEncoderLogic()
 {  
-    _ValueB = FastGPIO::Pin<RIGHT_B>::isInputHigh();
-    _ValueA = FastGPIO::Pin<RIGHT_XOR>::isInputHigh() ^ _ValueB;
+    ValueB = FastGPIO::Pin<RIGHT_B>::isInputHigh();
+    ValueA = FastGPIO::Pin<RIGHT_XOR>::isInputHigh() ^ ValueB;
 
-    _EncoderValue += (_ValueA ^ _PrevValueB) - (_PrevValueA ^ _ValueB);
+    EncoderValue += (ValueA ^ PrevValueB) - (PrevValueA ^ ValueB);
 
-    _PrevValueA = _ValueA;
-    _PrevValueB = _ValueB;
+    PrevValueA = ValueA;
+    PrevValueB = ValueB;
 }
 
 void EncoderInit()
@@ -94,12 +94,12 @@ Encoder EncoderLeft(true);
 Encoder EncoderRight(false);
 
 
-ISR(PCINT0_vect)
+ISR(PCINT0vect)
 {   
     EncoderLeft.LEFTEncoderLogic();
 }
 
-ISR(INT6_vect)
+ISR(INT6vect)
 {
     EncoderRight.RIGHTEncoderLogic();
 }
