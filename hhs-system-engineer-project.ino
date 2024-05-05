@@ -2,9 +2,6 @@
 #include "work/ran-func.cpp"
 #include "work/serial/serial.cpp"
 
-Zumo32U4ButtonA buttonA;
-Zumo32U4ButtonB buttonB;
-Zumo32U4ButtonC buttonC;
 Zumo32U4LineSensors lineSensors;
 Zumo32U4ProximitySensors proxSensors;
 
