@@ -29,5 +29,8 @@ void setup(){
 
 void loop(){
     printReadingsToSerial();
-    delay(500);
+    delay(5000);
 }
+
+//-------------------------
+
