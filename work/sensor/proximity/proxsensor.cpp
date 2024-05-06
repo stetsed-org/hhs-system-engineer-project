@@ -6,17 +6,17 @@
 proxSensor::proxSensor() {
 }
 
-proxSensor::proxSensor(Zumo32U4ProximitySensors a) : pvt_proxSensor(a) {
+proxSensor::proxSensor(Zumo32U4ProximitySensors* a) : pvt_proxSensor(a) {
 
 }
 
 bool proxSensor::basicReadClose() {
   if (debug) {
-    Serial1.println("Number of Sensors Active: " + String(pvt_proxSensor.getNumSensors()));
+    Serial1.println("Number of Sensors Active: " + String(pvt_proxSensor -> getNumSensors()));
   }
-  pvt_proxSensor.read();
-  int leftled = pvt_proxSensor.countsFrontWithLeftLeds();
-  int rightled = pvt_proxSensor.countsFrontWithRightLeds();
+  pvt_proxSensor -> read();
+  int leftled = pvt_proxSensor -> countsFrontWithLeftLeds();
+  int rightled = pvt_proxSensor -> countsFrontWithRightLeds();
 
   if (debug) {
     Serial1.println("Data L: " + String(leftled));

@@ -41,7 +41,7 @@ void setup() {
   Serial1.begin(4800);
   Serial1.println("Zumo Active, Serial1 Output");
   proxzumo.initFrontSensor();
-  proximity = proxSensor(proxzumo);
+  proximity = proxSensor(&proxzumo);
 
 
   // xbee.begin(4800);

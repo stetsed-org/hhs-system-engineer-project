@@ -14,7 +14,7 @@ public:
     * Get's given an instance of Zumo32U4ProximitySensors, due to issues when
     * initializing inside of the Constructor itself.
   */
-  proxSensor(Zumo32U4ProximitySensors);
+  proxSensor(Zumo32U4ProximitySensors*);
 
   /** Perform a basic read
     *  Returns back Boolean if >= 50(?)cm in distance, otherwise return false.
@@ -26,7 +26,7 @@ public:
   int deepRead();
 
 private:
-  Zumo32U4ProximitySensors pvt_proxSensor;
+  Zumo32U4ProximitySensors* pvt_proxSensor;
 };
 
 #include "proxsensor.cpp"
