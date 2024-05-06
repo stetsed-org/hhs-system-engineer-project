@@ -1,15 +1,21 @@
-bool debug = 1;
+bool debug = true;
 
-#include "work/headers.hpp"
-#include "work/ran-func.cpp"
-#include "work/serial/serial.cpp"
-#include "work/sensor/compass/accelerometer/accel.h"
-#include "work/sensor/compass/gyroscope/gyro.h"
-#include "work/sensor/compass/magnetometer/magnet.h"
+
 
 int test = 0;
 int speed = 0;
 
+int count = 0;
+
+#include <Arduino.h>
+#include <stdarg.h>
+#include "work/ran-func.cpp"
+#include "work/sensor/proximity/proxsensor.h"
+#include "work/headers.hpp"
+#include "work/serial/serial.cpp"
+#include "work/sensor/compass/accelerometer/accel.h"
+#include "work/sensor/compass/gyroscope/gyro.h"
+#include "work/sensor/compass/magnetometer/magnet.h"
 Accelerometer* accel;
 Gyroscope* gyro;
 Magnetometer* magnet;
@@ -25,11 +31,18 @@ char imuOutBuffer[139];
 
 //auto& xbee = Serial;
 
+// Proxmity Sensor Setup
+Zumo32U4ProximitySensors proxzumo;
+proxSensor proximity;
+
 void setup() {
   Wire.begin();
 
   Serial1.begin(4800);
   Serial1.println("Zumo Active, Serial1 Output");
+  proxzumo.initFrontSensor();
+  proximity = proxSensor(proxzumo);
+
 
   // xbee.begin(4800);
   
