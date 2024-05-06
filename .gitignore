@@ -35,7 +35,11 @@
 build/*
 
 # Ignore vscode
-.vsode/*
+.vscode/*
 
 # Doxygen Artifacts
 .doxygen/*
+
+# .vim session files
+*.vim
+
