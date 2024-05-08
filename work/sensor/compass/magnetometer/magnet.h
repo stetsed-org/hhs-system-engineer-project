@@ -8,7 +8,7 @@
  * the Magnetometer sensor in the IMU
  * to read its data
  */
-class Magnetometer : private CompassBase {
+class Magnetometer : private ICompassBase {
 	private:
 		/**
 		 * Private method that checks if the Magnetometer
@@ -16,9 +16,9 @@ class Magnetometer : private CompassBase {
 		 */
 		void pvt_RetrieveData() override;
 	public:
-		using CompassBase::CompassBase;
-		using CompassBase::Values;
-		using CompassBase::PrintDebugInfo;
+		using ICompassBase::ICompassBase;
+		using ICompassBase::Values;
+		using ICompassBase::PrintDebugInfo;
 };
 
 #include "magnet.cpp"

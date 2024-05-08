@@ -8,7 +8,7 @@
  * the Gyroscope sensor in the IMU
  * to read its data
  */
-class Gyroscope : private CompassBase {
+class Gyroscope : private ICompassBase {
 	private:
 		/**
 		 * Private method that checks if the Gyroscope
@@ -16,9 +16,9 @@ class Gyroscope : private CompassBase {
 		 */
 		void pvt_RetrieveData() override;
 	public:
-		using CompassBase::CompassBase;
-		using CompassBase::Values;
-		using CompassBase::PrintDebugInfo;
+		using ICompassBase::ICompassBase;
+		using ICompassBase::Values;
+		using ICompassBase::PrintDebugInfo;
 };
 
 #include "gyro.cpp"

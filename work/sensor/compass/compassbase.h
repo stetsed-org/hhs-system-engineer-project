@@ -9,7 +9,7 @@
  * 16bit integers that will hold
  * the values read by the sensor
  * attached to the child-class
- * of CompassBase
+ * of ICompassBase
  */
 struct Vector3 { int16_t x,y,z; };
 
@@ -19,9 +19,9 @@ struct Vector3 { int16_t x,y,z; };
  * 
  * This is the base class for all Zumo IMU-interfacing classes.
  * The Accelerometer, Gyroscope and Magnetometer classes
- * are all derived from this class (CompassBase).
+ * are all derived from this class (ICompassBase).
  */
-class CompassBase {
+class ICompassBase {
 	protected:
 		/**
 		 * the Vector3 struct (x,y,z) that holds
@@ -61,7 +61,7 @@ class CompassBase {
 		 * the pre-initialized Zumo32U4IMU sensor class
 		 * in the m_InterfacePTR member variable
 		 */
-		CompassBase(Zumo32U4IMU*);
+		ICompassBase(Zumo32U4IMU*);
 		
 		/**
 		 * Public method that allows the Zumo to read
