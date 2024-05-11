@@ -24,9 +24,15 @@ bool proxSensor::basicReadClose() {
   }
 
   if (leftled > 4 && rightled > 4){
+    if (debug) {
+      Serial1.println("Classified as true");
+    }
     return true;
   }
   else {
+    if (debug) {
+      Serial1.println("Classified as false");
+    }
     return false;
   }
 
