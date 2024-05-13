@@ -1,0 +1,3 @@
+# Leave .css and .js for Doxygen out of language detection
+
+doxygen-theme/* linguist-vendored
