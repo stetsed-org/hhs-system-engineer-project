@@ -1,4 +1,5 @@
 #include "../../headers.hpp"
+#include <string.h>
 
 class CompatibleEncoders : public Zumo32U4Encoders
 {
@@ -9,4 +10,6 @@ public:
     uint32_t ReadLeft();
     uint32_t ReadRight();
     uint32_t Read();
+    void ReadOverSerial();
+
 };

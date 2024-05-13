@@ -16,5 +16,16 @@ uint32_t CompatibleEncoders::ReadRight(){
 }
 
 uint32_t CompatibleEncoders::Read(){
+    EncoderValue[0] += getCountsAndResetLeft();
+    EncoderValue[1] += getCountsAndResetRight();
     return *EncoderValue;
+}
+
+void CompatibleEncoders::ReadOverSerial(){
+    EncoderValue[0] += getCountsAndResetLeft();
+    EncoderValue[1] += getCountsAndResetRight();
+    Serial1.println("E");
+    Serial1.println(EncoderValue[0]);
+    Serial1.println(EncoderValue[1]);
+    Serial1.println("e");
 }
