@@ -1,6 +1,9 @@
 #include <Arduino.h>
 #include "work/ran-func.cpp"
 #include "work/serial/serial.cpp"
+#include "work/sensor/encoders/encoders.cpp"
+
+CompatibleEncoders encoders;
 
 int test = 0;
 int speed = 0;
@@ -15,7 +18,6 @@ void setup() {
   Serial1.println("Zumo Active, Serial1 Output");
 
   xbee.begin(4800);
-  
   pinMode(A10, OUTPUT);
   pinMode(A9, OUTPUT);
   pinMode(16, OUTPUT);
@@ -31,5 +33,6 @@ void loop() {
   if(Serial1.available()){
     readserial(test,speed);
   }
+  encoders.ReadOverSerial();
+  delay(40);
 }
-

@@ -4,12 +4,13 @@
 class CompatibleEncoders : public Zumo32U4Encoders
 {
 private:
-    uint32_t EncoderValue[2];
+    int32_t EncoderValue[2];
 public:
     CompatibleEncoders();
-    uint32_t ReadLeft();
-    uint32_t ReadRight();
-    uint32_t Read();
+    int32_t ReadLeft();
+    int32_t ReadRight();
+    int32_t Read();
+    void ResetValues();
     void ReadOverSerial();
 
 };
