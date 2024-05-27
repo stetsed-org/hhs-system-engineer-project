@@ -2,9 +2,9 @@
 
 
 
-class linesensor : public Zumo32U4LineSensors{
+class linesensors : public Zumo32U4LineSensors{
     public:
-        linesensor();
+        linesensors();
         void readValues();
         void serialPrintValues();
 
@@ -14,5 +14,5 @@ class linesensor : public Zumo32U4LineSensors{
         bool useEmitters;
         //int sensorAmount; //Currently not in use, might delete later if it remains unused
         unsigned int values[5];
-        int pins[5]; //array building needed. note: I am too dumb
+        int pins[5];
 };

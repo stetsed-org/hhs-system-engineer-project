@@ -3,18 +3,19 @@
 
 
 //Constructor of linesensor class, configuring a few settings for correct use within the object.
-linesensor::linesensor(){
-  useEmitters = true;
+linesensors::linesensors():lineSensorsLibrary(),useEmitters(true){
+  
   lineSensorsLibrary.initFiveSensors();
+  Serial1.println("linesensor object built"); 
 }
 
 //Function to read the value of each linesensor, mainly to use within this class.
-void linesensor::readValues(){
+void linesensors::readValues(){
   lineSensorsLibrary.read(values, useEmitters);
 }
 
 //Function to print the value of each linesensor in a format used by the dashboard.
-void linesensor::serialPrintValues(){
+void linesensors::serialPrintValues(){
   Serial1.println("L"); // Begin of linesensor measurement values
   Serial1.println(values[0]);
   Serial1.println(values[1]);

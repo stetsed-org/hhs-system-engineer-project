@@ -1,16 +1,17 @@
 #include <Arduino.h>
 #include "work/ran-func.cpp"
 #include "work/serial/serial.cpp"
-#include "" //Need incluse linesensors.cpp?
+#include "work/sensor/Linesensors/linesensors.cpp"
+#include  "work/headers.hpp"
 
-Zumo32U4LineSensors lineSensors;
-Zumo32U4ProximitySensors proxSensors;
-
+//Zumo32U4LineSensors lineSensors;
+// Zumo32U4ProximitySensors proxSensors;
+linesensors uwu;
 #define NUM_SENSORS 5
 
 unsigned int lineSensorValues[NUM_SENSORS];
 
-bool useEmitters = true;
+//bool useEmitters = true;
 
 uint8_t selectedSensorIndex = 0;
 
@@ -21,6 +22,7 @@ int speed = 0;
 #define LINKS OCR1B
 
 auto& xbee = Serial;
+
 
 // Algemene setup
 void setup() {
@@ -38,9 +40,10 @@ void setup() {
   SetupTimer1();
 
   Serial.println();
+//uwu=linesensors();
 
   // Methode wordt aangeroepen om alle 5 de sensoren te gebruiken (3 kan ook, maar dat doen wij niet).
-  lineSensors.initFiveSensors();
+  // lineSensors.initFiveSensors();
 }
 
 // Methode die aangeroepen wordt. Hierin wordt beschreven dat de gelezen waardes van de sensoren op 1 lijn met tussenruimte moeten worden geprint naar serial.
@@ -67,13 +70,14 @@ void loop() {
   if ((uint16_t)(millis() - lastSampleTime) >= 100)
   {
     lastSampleTime = millis();
-
+    //linesensors uwu;
     // Leest alle sensorwaardes uit van de lijnsensoren. Ook wordt via de variable useEmitters aangegeven of de IR emitters gebruikt moeten worden.
     //lineSensors.read(lineSensorValues, useEmitters);
-    
+    uwu.readValues();
 
     // Stuurt de gelezen waardes naar de serial (te zien in de "serial monitor" in Visual Studio).
     //printReadingsToSerial();
+    uwu.serialPrintValues();
   }
 }
 // Code kan gerunt worden in Visual Studio door in de bovenste balk ">arduino: verify" of ">arduino: upload" in te voeren
