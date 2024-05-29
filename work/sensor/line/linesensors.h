@@ -1,6 +1,7 @@
+#ifndef LINESENSOR_H
+#define LINESENSOR_H
+
 #include "../../headers.hpp"
-
-
 
 class linesensors : public Zumo32U4LineSensors{
     public:
@@ -16,3 +17,7 @@ class linesensors : public Zumo32U4LineSensors{
         unsigned int values[5];
         int pins[5];
 };
+
+#include "linesensors.cpp"
+
+#endif

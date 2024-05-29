@@ -5,21 +5,21 @@
 #include <Zumo32U4.h>
 #include "headers.hpp"
 
-struct {
+struct stateStorageStruct{
   bool leftTurnActive;
   bool rightTurnActive;
   char currentColor;
-} stateStorageStruct;
+} ;
 
-struct{
+struct sensorStruct{
   proxSensor* proximitySensorPointer;
-  // lineSensor lineSensorPointer;
+  linesensors* lineSensorPointer;
   Accelerometer* accelerometerPointer;
   Gyroscope* gyroscopePointer;
   Magnetometer* magnetometerPointer;
   CompatibleEncoders* encodersPointer;
 
-} sensorStruct;
+} ;
 
 
 #endif
