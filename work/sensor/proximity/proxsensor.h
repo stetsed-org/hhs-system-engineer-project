@@ -1,3 +1,6 @@
+#ifndef PROXSENSOR_H
+#define PROXSENSOR_H
+
 #include "Zumo32U4ProximitySensors.h"
 
 /** Class for reading the Proximity Sensor and returning Usable Data
@@ -30,3 +33,5 @@ private:
 };
 
 #include "proxsensor.cpp"
+
+#endif

@@ -7,17 +7,9 @@ int count = 0;
 
 bool calibratie = true;
 
-#include "work/calibratie.cpp"
 #include <Arduino.h>
 #include <stdarg.h>
-#include "work/ran-func.cpp"
-#include "work/sensor/proximity/proxsensor.h"
 #include "work/headers.hpp"
-#include "work/serial/serial.cpp"
-#include "work/sensor/compass/accelerometer/accel.h"
-#include "work/sensor/compass/gyroscope/gyro.h"
-#include "work/sensor/compass/magnetometer/magnet.h"
-#include "work/sensor/encoders/encoders.h"
 
 Accelerometer* accel;
 Gyroscope* gyro;
@@ -62,11 +54,6 @@ void setup() {
   SetupTimer1();
 
   Serial.println();
-
-  // check if compass can be initialized properl
-  // 
-
-  // end of compass initialization test
 }
 
 void loop() {
