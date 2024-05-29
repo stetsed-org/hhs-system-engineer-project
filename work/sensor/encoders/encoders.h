@@ -1,5 +1,8 @@
+#ifndef ENCODERSS_H 
+#define ENCODERSS_H
+
 #include "../../headers.hpp"
-#include <string.h>
+#include <Arduino.h>
 
 class CompatibleEncoders : public Zumo32U4Encoders
 {
@@ -10,6 +13,11 @@ public:
     uint32_t ReadLeft();
     uint32_t ReadRight();
     uint32_t Read();
+    void ResetValues();
     void ReadOverSerial();
 
 };
+
+#include "encoders.cpp"
+
+#endif
