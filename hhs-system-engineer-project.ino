@@ -1,3 +1,10 @@
+linesensors uwu;
+#define NUM_SENSORS 5
+
+unsigned int lineSensorValues[NUM_SENSORS];
+
+uint8_t selectedSensorIndex = 0;
+
 bool debug = true;
 
 int test = 0;
@@ -34,6 +41,8 @@ Zumo32U4Motors motors;
 CompatibleEncoders encoders;
 
 
+
+// Algemene setup
 void setup() {
   Wire.begin();
 
