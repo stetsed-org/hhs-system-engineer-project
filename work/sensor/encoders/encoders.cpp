@@ -29,3 +29,10 @@ void CompatibleEncoders::ReadOverSerial(){
     Serial1.println(EncoderValue[1]);
     Serial1.println("e");
 }
+
+void CompatibleEncoders::ResetValues(){
+    getCountsAndResetLeft();
+    getCountsAndResetRight();
+    EncoderValue[0] = 0;
+    EncoderValue[1] = 0;
+}

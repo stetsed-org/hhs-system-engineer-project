@@ -1,12 +1,13 @@
 bool debug = true;
 
-
-
 int test = 0;
 int speed = 0;
 
 int count = 0;
 
+bool calibratie = true;
+
+#include "work/calibratie.cpp"
 #include <Arduino.h>
 #include <stdarg.h>
 #include "work/ran-func.cpp"
@@ -16,6 +17,8 @@ int count = 0;
 #include "work/sensor/compass/accelerometer/accel.h"
 #include "work/sensor/compass/gyroscope/gyro.h"
 #include "work/sensor/compass/magnetometer/magnet.h"
+#include "work/sensor/encoders/encoders.h"
+
 Accelerometer* accel;
 Gyroscope* gyro;
 Magnetometer* magnet;
@@ -34,6 +37,10 @@ char imuOutBuffer[139];
 // Proxmity Sensor Setup
 Zumo32U4ProximitySensors proxzumo;
 proxSensor proximity;
+
+Zumo32U4Motors motors;
+CompatibleEncoders encoders;
+
 
 void setup() {
   Wire.begin();
@@ -56,49 +63,15 @@ void setup() {
 
   Serial.println();
 
-  // check if compass can be initialized properly
-  Zumo32U4IMU* compassInterfacePTR = new Zumo32U4IMU();
-  if (compassInterfacePTR->init()){
-    Serial1.println("Compass interface initialized successfully!");
-    compassInterfacePTR->enableDefault();
-    *accel = Accelerometer(compassInterfacePTR);
-    *gyro = Gyroscope(compassInterfacePTR);
-    *magnet =  Magnetometer(compassInterfacePTR);
-    if (debug) {
-      accel->PrintDebugInfo();
-      gyro->PrintDebugInfo();
-      magnet->PrintDebugInfo();
-    }
-  } else {
-    Serial1.println("Compass interface probably not initialized successfully?");
-  }
+  // check if compass can be initialized properl
+  // 
+
   // end of compass initialization test
 }
 
 void loop() {
-  //if(Serial1.available()){
-    //readserial(test,speed);
-  //}
-  accelData = accel->Values();
-  gyroData = gyro->Values();
-  magnetData = magnet->Values();
-
-  printCompassValues();
-}
-
-void printCompassValues() {
-  sprintf(imuOutBuffer, "%s\r\n%s%d\r\n%s%d\r\n%s%d\r\n%s%d\r\n%s%d\r\n%s%d\r\n%s%d\r\n%s%d\r\n%s%d\r\n%s",
-    "--------------------",
-    "aX: ", accelData.x,
-    "aY: ", accelData.y,
-    "aZ: ", accelData.z,
-    "gX: ", gyroData.x,
-    "gY: ", gyroData.y,
-    "gZ: ", gyroData.z,
-    "mX: ", magnetData.x,
-    "mY: ", magnetData.y,
-    "mZ: ", magnetData.z,
-    "--------------------");
-    
-  Serial1.println(imuOutBuffer);
-}
+    if (calibratie){
+      float calibratie = calibrateMotor(motors,200,encoders); 
+      Serial1.println(calibratie);
+      };
+  };
