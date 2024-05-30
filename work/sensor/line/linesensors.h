@@ -8,6 +8,7 @@ class linesensors : public Zumo32U4LineSensors{
         linesensors();
         void readValues();
         void serialPrintValues();
+        unsigned int* gibValues();
 
     private:
         //sensorReference Zumo32U4LineSensors; //ignore problem, for now... ;)
@@ -16,6 +17,7 @@ class linesensors : public Zumo32U4LineSensors{
         //int sensorAmount; //Currently not in use, might delete later if it remains unused
         unsigned int values[5];
         int pins[5];
+
 };
 
 #include "linesensors.cpp"
