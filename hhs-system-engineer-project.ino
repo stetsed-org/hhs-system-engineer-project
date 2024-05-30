@@ -1,11 +1,9 @@
-linesensors uwu;
+//linesensors uwu;
+bool debug = true;
+
 #define NUM_SENSORS 5
 
 unsigned int lineSensorValues[NUM_SENSORS];
-
-uint8_t selectedSensorIndex = 0;
-
-bool debug = true;
 
 int test = 0;
 int speed = 0;
@@ -17,6 +15,8 @@ bool calibratie = true;
 #include <Arduino.h>
 #include <stdarg.h>
 #include "work/headers.hpp"
+
+uint8_t selectedSensorIndex = 0;
 
 Accelerometer* accel;
 Gyroscope* gyro;

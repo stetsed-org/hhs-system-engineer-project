@@ -7,6 +7,7 @@ class linesensors : public Zumo32U4LineSensors{
         linesensors();
         void readValues();
         void serialPrintValues();
+        unsigned int* gibValues();
 
     private:
         //sensorReference Zumo32U4LineSensors; //ignore problem, for now... ;)

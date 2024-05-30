@@ -14,6 +14,10 @@ void linesensors::readValues(){
   lineSensorsLibrary.read(values, useEmitters);
 }
 
+unsigned int* linesensors::gibValues(){
+  return values;
+}
+
 //Function to print the value of each linesensor in a format used by the dashboard.
 void linesensors::serialPrintValues(){
   Serial1.println("L"); // Begin of linesensor measurement values
