@@ -3,12 +3,12 @@
 
 #include "../../headers.hpp"
 
-class linesensors : public Zumo32U4LineSensors{
+class linesensors : public Zumo32U4LineSensors, public Sensor{
     public:
         linesensors();
         void readValues();
         void serialPrintValues();
-        unsigned int* gibValues();
+        unsigned int* read();
 
     private:
         //sensorReference Zumo32U4LineSensors; //ignore problem, for now... ;)

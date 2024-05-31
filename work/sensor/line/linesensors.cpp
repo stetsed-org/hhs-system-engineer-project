@@ -25,6 +25,6 @@ void linesensors::serialPrintValues(){
   Serial1.println("l"); // end of these measurement values. These are mainly important for use in the dashboard, to correctly insert the values.
 }
 
-unsigned int* linesensors::gibValues(){
+unsigned int* linesensors::read(){
   return values;
 }

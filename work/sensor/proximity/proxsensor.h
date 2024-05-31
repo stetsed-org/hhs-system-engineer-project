@@ -6,7 +6,7 @@
 /** Class for reading the Proximity Sensor and returning Usable Data
  * To-do: Subclass of eventual "Sensor" baseclass, implement later.
 */
-class proxSensor {
+class proxSensor : public Sensor{
 public:
   /** proxSensor constructor without input 
     * Only used within global variable decleration, not used outside. 
@@ -24,7 +24,7 @@ public:
     *  Uses the default Zumo32U4ProximitySensors.read function provided by 32U4 library.
     *  If debug global var is true, shall return number of sensors active and the raw data to Serial1 
   */
-  bool basicReadClose();
+  bool read();
   // Advanced Read, currently unused, possibly will return int of distance if able to acces > 1 prox sensor and/or read analog data.
   int deepRead();
 

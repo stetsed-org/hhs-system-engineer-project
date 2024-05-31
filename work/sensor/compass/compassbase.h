@@ -21,7 +21,7 @@ struct Vector3 { int16_t x,y,z; };
  * The Accelerometer, Gyroscope and Magnetometer classes
  * are all derived from this class (ICompassBase).
  */
-class ICompassBase {
+class ICompassBase : public Sensor{
 	protected:
 		/**
 		 * the Vector3 struct (x,y,z) that holds

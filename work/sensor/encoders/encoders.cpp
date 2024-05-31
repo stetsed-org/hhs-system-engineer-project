@@ -15,7 +15,7 @@ uint32_t CompatibleEncoders::ReadRight(){
     return EncoderValue[1];
 }
 
-uint32_t CompatibleEncoders::Read(){
+uint32_t* CompatibleEncoders::read(){
     EncoderValue[0] += getCountsAndResetLeft();
     EncoderValue[1] += getCountsAndResetRight();
     return *EncoderValue;

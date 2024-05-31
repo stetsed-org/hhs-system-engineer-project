@@ -6,6 +6,9 @@
 #include <string.h>
 #include "serial/serial.cpp"
 
+// Include Sensor Base Class
+#include "sensor/sensor.h"
+
 // Include Encoders
 #include "sensor/encoders/encoders.h"
 

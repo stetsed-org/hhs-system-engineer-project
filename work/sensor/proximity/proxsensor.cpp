@@ -10,7 +10,7 @@ proxSensor::proxSensor(Zumo32U4ProximitySensors* a) : pvt_proxSensor(a) {
 
 }
 
-bool proxSensor::basicReadClose() {
+bool proxSensor::read() {
   if (debug) {
     Serial1.println("Number of Sensors Active: " + String(pvt_proxSensor -> getNumSensors()));
   }
