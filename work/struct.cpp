@@ -21,5 +21,10 @@ struct sensorStruct{
 
 } ;
 
+struct pathFindingData{
+  int leftMotorSpeed;
+  int rightMotorSpeed;
+  int currentError;
+};
 
 #endif

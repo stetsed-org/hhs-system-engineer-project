@@ -27,8 +27,10 @@ float calibrateMotor(Zumo32U4Motors motor, int Speed, CompatibleEncoders encoder
   delay(10000);
 
 
-  int32_t leftvalue = encoder.ReadLeft();
-  int32_t rightvalue = encoder.ReadRight();
+  int leftvalue = encoder.ReadLeft();
+  int rightvalue = encoder.ReadRight();
+  Serial1.println(leftvalue);
+  Serial1.println(rightvalue);
 
   motor.setLeftSpeed(0);
   motor.setRightSpeed(0);
@@ -46,14 +48,14 @@ float calibrateMotor(Zumo32U4Motors motor, int Speed, CompatibleEncoders encoder
      we make no changes to the speed values of either side.
   */
   if (leftvalue > rightvalue){
-      float offset = rightvalue / leftvalue;
+      offset = (float)rightvalue / (float)leftvalue;
   }
   else if (rightvalue > leftvalue){
-      float offset = leftvalue / rightvalue;
+      offset = (float)leftvalue / (float)rightvalue;
       offset *= -1;
   }
   if (rightvalue == leftvalue){
-    float offset = 1;
+    offset = 1;
   }
 
   return offset;

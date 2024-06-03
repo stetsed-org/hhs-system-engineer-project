@@ -28,4 +28,7 @@
 #include "ran-func.cpp"
 #include "struct.cpp"
 
+// Include Logic Classes
+#include "logic/navigator.h"
+
 #endif
