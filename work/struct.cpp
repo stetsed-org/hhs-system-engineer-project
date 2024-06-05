@@ -8,7 +8,7 @@
 struct stateStorageStruct{
   bool leftTurnActive;
   bool rightTurnActive;
-  char currentColor;
+  char currentColor[5] = {'b','b','b','b','b'};
 } ;
 
 struct sensorStruct{
@@ -25,6 +25,7 @@ struct pathFindingData{
   int leftMotorSpeed;
   int rightMotorSpeed;
   int currentError;
+  char currentColor;
 };
 
 #endif

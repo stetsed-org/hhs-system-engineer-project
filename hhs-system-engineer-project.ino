@@ -29,6 +29,11 @@ Zumo32U4Motors motors;
 // Initialize Navigator
 navigator NavigatorInstance;
 
+
+Zumo32U4ButtonB buttonB;
+
+stateStorageStruct stateStorageStructObject;
+
 // Algemene setup
 void setup() {
   Wire.begin();
@@ -63,27 +68,94 @@ void setup() {
 
   calibrateSensors(); 
 
-
+  stateStorageStructObject.leftTurnActive = false;
+  stateStorageStructObject.rightTurnActive = false;
 };
 
 void loop() {  
+  //Serial1.println("Current Color State" + (String)stateStorageStructObject.currentColor);
+ 
+  int blackCount = 0;
+  int greenCount = 0;
+  for(int i = 0; i < 5; ++i){
+    //Serial1.print((String)i + " " + (String)stateStorageStructObject.currentColor[i] + " ");
+      if (stateStorageStructObject.currentColor[i] == 'b'){
+          blackCount += 1;
+        }
+      if (stateStorageStructObject.currentColor[i] == 'g'){
+          greenCount += 1;
+        }
+    }
+  //Serial1.println(" ");
 
-  pathFindingData temp = NavigatorInstance.pathFindingBlack(&sensorStructObject,lastError,lineSensorValues);
+  if (greenCount >= 2){
+    pathFindingData temp = NavigatorInstance.pathFindingBlack(&sensorStructObject,lastError,lineSensorValues,200);
+ 
+    lastError = temp.currentError;
 
-  lastError = temp.currentError;
+    stateStorageStructObject.currentColor[4] = stateStorageStructObject.currentColor[3];
+    stateStorageStructObject.currentColor[3] = stateStorageStructObject.currentColor[2];
+    stateStorageStructObject.currentColor[2] = stateStorageStructObject.currentColor[1];
+    stateStorageStructObject.currentColor[1] = stateStorageStructObject.currentColor[0];
+    stateStorageStructObject.currentColor[0] = temp.currentColor;
 
-  Serial1.println(temp.rightMotorSpeed);
-  temp.rightMotorSpeed = (int)abs(((float)temp.rightMotorSpeed * 1.03));
+    //Serial1.println(temp.rightMotorSpeed);
+    temp.rightMotorSpeed = (int)abs(((float)temp.rightMotorSpeed * 1.03));
 
-  motors.setSpeeds(temp.leftMotorSpeed,temp.rightMotorSpeed);
+    //motors.setSpeeds(temp.leftMotorSpeed,temp.rightMotorSpeed);
+
+  if (OCR1B < temp.leftMotorSpeed && OCR1B <= 350){
+      OCR1B += 25;
+    }
+  if (OCR1A < temp.rightMotorSpeed && OCR1A <= 350){
+      OCR1A += 25;
+    }
+  if (OCR1B > temp.leftMotorSpeed && OCR1B >= 25){
+      OCR1B -= 25;
+    }
+  if (OCR1A > temp.rightMotorSpeed && OCR1A >= 25){
+      OCR1A -= 25;
+    }
+ }
+
+  else{
+    pathFindingData temp = NavigatorInstance.pathFindingBlack(&sensorStructObject,lastError,lineSensorValues,350);
+    
+    lastError = temp.currentError;
+
+    stateStorageStructObject.currentColor[4] = stateStorageStructObject.currentColor[3];
+    stateStorageStructObject.currentColor[3] = stateStorageStructObject.currentColor[2];
+    stateStorageStructObject.currentColor[2] = stateStorageStructObject.currentColor[1];
+    stateStorageStructObject.currentColor[1] = stateStorageStructObject.currentColor[0];
+    stateStorageStructObject.currentColor[0] = temp.currentColor;
+    //Serial1.println(temp.rightMotorSpeed);
+    temp.rightMotorSpeed = (int)abs(((float)temp.rightMotorSpeed * 1.03));
+
+    //motors.setSpeeds(temp.leftMotorSpeed,temp.rightMotorSpeed);
+
+  if (OCR1B < temp.leftMotorSpeed && OCR1B <= 350){
+      OCR1B += 25;
+    }
+  if (OCR1A < temp.rightMotorSpeed && OCR1A <= 350){
+      OCR1A += 25;
+    }
+  if (OCR1B > temp.leftMotorSpeed && OCR1B >= 25){
+      OCR1B -= 25;
+    }
+  if (OCR1A > temp.rightMotorSpeed && OCR1A >= 25){
+      OCR1A -= 25;
+    }
+
+  }
   //float output = calibrateMotor(motors,350,encodersObject);
   //Serial1.println(output,30);
+
 }
 
 void calibrateSensors()
 {
 
-  // Wait 1 second and then begin automatic sensor calibration
+  // Wait 1 second and then begin automatice not ignored as it ought to be sensor calibration
   // by rotating in place to sweep the sensors over the line
   delay(1000);
   for(uint16_t i = 0; i < 120; i++)

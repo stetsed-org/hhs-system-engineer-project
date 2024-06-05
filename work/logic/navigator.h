@@ -5,9 +5,9 @@
 
 class navigator {
 public:
-  pathFindingData pathFindingBlack(sensorStruct*, int,int*);
+  pathFindingData pathFindingBlack(sensorStruct*, int,int*,int);
   pathFindingData pathFindingTurn(sensorStruct*);
-  pathFindingData pathFindingGreen(sensorStruct*);
+  pathFindingData pathFindingGreen(sensorStruct*, int,int*);
 };
 
 #include "navigator.cpp"
