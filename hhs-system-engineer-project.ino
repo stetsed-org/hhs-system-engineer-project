@@ -33,10 +33,9 @@ navigator NavigatorInstance;
 Zumo32U4ButtonB buttonB;
 
 void setup() {
-stateStorageStruct stateStorageStructObject;
-
-// Algemene setup
-void setup() {
+  stateStorageStruct stateStorageStructObject;
+  
+  // Algemene setup
   Wire.begin();
 
   Serial1.begin(57600);
