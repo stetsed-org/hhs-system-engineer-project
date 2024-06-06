@@ -4,24 +4,26 @@
 #include "../headers.hpp"
 
 char colorDetection(sensorStruct* sensorStructPointer, int* lineSensorValues){
-    sensorStructPointer -> lineSensorPointer -> readCalibrated(lineSensorValues);
+    //sensorStructPointer -> lineSensorPointer -> readCalibrated(lineSensorValues);
     // Left Middle * 0.25 + Middle + Right Middle * 0.25
     int value = (int)(lineSensorValues[1] + lineSensorValues[2] + lineSensorValues[3]);
-    Serial1.println((String)value);
+    //Serial1.println((String)value);
     //Serial1.println("Value: " + (String)value);
-    
+
     if (value < 800){
         //Serial1.println("Color is green?");
         return 'g';
       }
+    
     //else if (value > 400 && value < 500){
     //    Serial1.println("Color is probally gray");
     //    return 'y';
     //}
-    else if (value >= 800){
+    else if (value >= 800){  
         //Serial1.println("Color is probally black");
         return 'b';
       }
+
     else {
       return 'b';
     }
@@ -34,10 +36,17 @@ pathFindingData navigator::pathFindingBlack(sensorStruct* sensorStructObject, in
   pathFindingData pathFindingDataInstance;
 
   // Reading the lineSensor's with readLine which returns a value between 0-4000
-  int position = sensorStructObject -> lineSensorPointer -> readLine(lineSensorValues);
+  int position = sensorStructObject -> lineSensorPointer -> readLine_but_good_and_not_colour_blind(lineSensorValues); 
+
+  //if(lineSensorValues[0] >= 800) TL = true, Serial1.println("T-l");
+  //if(lineSensorValues[4] >= 800) TR = true, Serial1.println("T-r");
+  //if (position = 0 && TL) position = 2000, TL = false;
+
+
+  //Serial1.println(position);
 
   // Subtract 2000, so a negative number means we need to go left and a positive number means we need to go right
-  int error = position - 1500;
+  int error = position - 2000;
 
   /* PID Controller, you can set proportional value and derivitave value to diffrent settings
     * Default values: 4, 6
@@ -48,7 +57,7 @@ pathFindingData navigator::pathFindingBlack(sensorStruct* sensorStructObject, in
     * stored in stateStorage struct for the program. And the defined values it will calculate the speed
     * differentional
     */
-  int proportional = 4;
+  int proportional = 1;
   int derivitave = 6;
 
   int speedDiffrence = error / proportional + derivitave * (error - lastError);
@@ -57,6 +66,7 @@ pathFindingData navigator::pathFindingBlack(sensorStruct* sensorStructObject, in
 
   int tempLeftMotorSpeed = maxSpeed + speedDiffrence;
   int tempRightMotorSpeed = maxSpeed - speedDiffrence;
+  //Serial1.println(speedDiffrence);
 
   /* Makes sure we are not given a value lower than 0 and 
    * higher than maxspeed to the motors for return.
