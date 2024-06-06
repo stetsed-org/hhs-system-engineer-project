@@ -4,6 +4,10 @@
 #include "../headers.hpp"
 
 class navigator {
+private:
+bool TL = false;
+bool TR = false;
+
 public:
   pathFindingData pathFindingBlack(sensorStruct*, int,int*,int);
   pathFindingData pathFindingTurn(sensorStruct*);
