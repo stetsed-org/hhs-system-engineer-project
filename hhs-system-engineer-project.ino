@@ -32,10 +32,10 @@ navigator NavigatorInstance;
 
 Zumo32U4ButtonB buttonB;
 
-stateStorageStruct stateStorageStructObject;
-
-// Algemene setup
 void setup() {
+  stateStorageStruct stateStorageStructObject;
+  
+  // Algemene setup
   Wire.begin();
 
   Serial1.begin(57600);
@@ -43,6 +43,10 @@ void setup() {
   proxzumo.initFrontSensor();
   proximitySensorObject = proxSensor(&proxzumo);
 
+  //xbee.begin(57600);
+
+  Serial1.println();
+  
   // xbee.begin(4800);
   
   pinMode(A10, OUTPUT);
