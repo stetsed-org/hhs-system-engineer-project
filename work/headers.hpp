@@ -6,6 +6,34 @@
 #include <Zumo32U4.h>
 #include <string.h>
 
+#include "serial/serial.cpp"
+
+// Include Sensor Base Class
+#include "sensor/sensor.h"
+
+// Include Encoders
+#include "sensor/encoders/encoders.h"
+
+// Include proximity sensor
+#include "sensor/proximity/proxsensor.h"
+
+// Include Compass Based Sensors
+#include "sensor/compass/gyroscope/gyro.h"
+#include "sensor/compass/magnetometer/magnet.h"
+#include "sensor/compass/accelerometer/accel.h"
+
+// Include line sensors
+#include "sensor/line/linesensors.h"
+
+// Include Calibration and others
+#include "calibratie.cpp"
+#include "ran-func.cpp"
+#include "struct.cpp"
+
+// Include Logic Classes
+#include "logic/navigator.h"
+
+// Include Motor Controller class
 #include "motor/MotorController.h"
 
 #endif
