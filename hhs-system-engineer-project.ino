@@ -29,15 +29,15 @@ void setup() {
 
   xbee.begin(4800);
 
-  Serial.println();
+  Serial1.println();
 }
 
 void loop() {
    
 
   //MotorController Test
-  if (Serial.available() > 0) {
-    char input = Serial.read();
+  if (Serial1.available() > 0) {
+    char input = Serial1.read();
 
     //Besturen met toetsenbord input, m.b.v ChatGPT. Zie bijlage B.1 en B.2
     //Aanpassingen: de snelheden, vertaling v.d. println outputs en het schrappen van overbodige comments.
@@ -46,30 +46,30 @@ void loop() {
     switch (input) {
       case 'w':
         motorController.setSpeed(200, 200);
-        Serial.println("Vooruit");
+        Serial1.println("Vooruit");
         break;
       case 's':
         motorController.setSpeed(-200, -200);
-        Serial.println("Achteruit");
+        Serial1.println("Achteruit");
         break;
       case 'a':
         motorController.setSpeed(200, -200);
-        Serial.println("Naar Links");
+        Serial1.println("Naar Links");
         break;
       case 'd':
         motorController.setSpeed(-200, 200);
-        Serial.println("Naar Rechts");
+        Serial1.println("Naar Rechts");
         break;
       default:
         motorController.stop(); //If any key other 'w','a','s' or 'd' is received as input: Stop.
-        Serial.println("Gestopt");
+        Serial1.println("Gestopt");
         break;
     }
   }
  
   else if (buttonA.isPressed()) {
     motorController.stop();
-    Serial.println("Gestopt");
+    Serial1.println("Gestopt");
 }
 
 
