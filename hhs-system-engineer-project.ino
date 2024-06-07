@@ -24,7 +24,6 @@ linesensors lineSensorObject;
 sensorStruct sensorStructObject;
 
 // Motors Setup
-Zumo32U4Motors motors;
 MotorController motorController;
 
 // Initialize Navigator
