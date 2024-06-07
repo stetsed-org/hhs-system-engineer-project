@@ -25,6 +25,7 @@ sensorStruct sensorStructObject;
 
 // Motors Setup
 Zumo32U4Motors motors;
+MotorController motorController;
 
 // Initialize Navigator
 navigator NavigatorInstance;
@@ -106,7 +107,7 @@ void loop() {
     //Serial1.println(temp.rightMotorSpeed);
     temp.rightMotorSpeed = (int)abs(((float)temp.rightMotorSpeed * 1.03));
 
-    //motors.setSpeeds(temp.leftMotorSpeed,temp.rightMotorSpeed);
+    //motorController.setSpeed(temp.leftMotorSpeed,temp.rightMotorSpeed);
 
   if (OCR1B < temp.leftMotorSpeed && OCR1B <= 350){
       OCR1B += 25;
@@ -135,7 +136,7 @@ void loop() {
     //Serial1.println(temp.rightMotorSpeed);
     temp.rightMotorSpeed = (int)abs(((float)temp.rightMotorSpeed * 1.03));
 
-    //motors.setSpeeds(temp.leftMotorSpeed,temp.rightMotorSpeed);
+    //motorController.setSpeed(temp.leftMotorSpeed,temp.rightMotorSpeed);
 
   if (OCR1B < temp.leftMotorSpeed && OCR1B <= 350){
       OCR1B += 25;
@@ -166,14 +167,14 @@ void calibrateSensors()
   {
     if (i > 30 && i <= 90)
     {
-      motors.setSpeeds(-200, 200);
+      motorController.setSpeed(-200, 200);
     }
     else
     {
-      motors.setSpeeds(200, -200);
+      motorController.setSpeed(200, -200);
     }
 
     sensorStructObject.lineSensorPointer -> calibrate();
   }
-  motors.setSpeeds(0, 0);
+  motorController.setSpeed(0, 0);
 }
