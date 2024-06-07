@@ -44,13 +44,13 @@ int linesensors::readLine_but_good_and_not_colour_blind(unsigned int *sensor_val
     avg = 0;
     sum = 0;
 
-    for(i=0;i<_numSensors;i++) {
-        int value = sensor_values[i];
+    for(i=0;i<_numSensors-2;i++) {
+        int value = sensor_values[i+1];
         if(white_line)
             value = 1000-value;
 
         // keep track of whether we see the line at all
-        if(value > 170) {
+        if(value > 130) {
             on_line = 1;
         }
 
@@ -64,13 +64,8 @@ int linesensors::readLine_but_good_and_not_colour_blind(unsigned int *sensor_val
 
     if(!on_line)
     {
-        // If it last read to the left of center, return 0.
-        if(_lastValue < (_numSensors-1)*1000/2)
-            return 0;
 
-        // If it last read to the right of center, return the max.
-        else
-            return (_numSensors-1)*1000;
+      return -1;
 
     }
 

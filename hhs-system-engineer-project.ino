@@ -39,7 +39,7 @@ void setup() {
   Wire.begin();
 
   Serial1.begin(57600);
-  Serial1.println("Zumo Active, Serial1 Output");
+  // Serial1.println("Zumo Active, Serial1 Output");
   proxzumo.initFrontSensor();
   proximitySensorObject = proxSensor(&proxzumo);
 

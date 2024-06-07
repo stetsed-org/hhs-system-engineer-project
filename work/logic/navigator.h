@@ -7,6 +7,7 @@ class navigator {
 private:
 bool TL = false;
 bool TR = false;
+bool LineGone = false;
 
 public:
   pathFindingData pathFindingBlack(sensorStruct*, int,int*,int);
