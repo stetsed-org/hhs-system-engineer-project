@@ -4,19 +4,17 @@
 
 #include "../headers.hpp"
 
+struct motorSpeeds {
+  uint16_t left, right;
+};
 
-
-class MotorController{
-    private:
-    int leftSpeed;
-    int rightSpeed;
+class MotorController : public Sensor {
+  private:
     Zumo32U4Motors motors;
 
-
-    public:
+  public:
     MotorController();
-    ~MotorController();
-
+    motorSpeeds read();
     void setSpeed(int, int);
     void stop();
 };
