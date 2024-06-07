@@ -55,7 +55,7 @@ pathFindingData navigator::pathFindingBlack(sensorStruct* sensorStructObject, in
       int timeAddition = lastRight + lastLeft;
     }
     //we are on a line, we have a turn, turning for so long?, we don't have a line
-  else if ((TL || TR) && ((currentTime - turnTime) > howLongTurn + timeAddition) && LineGone) {TL = false; TR = false; LineGone = false;}
+  else if ((TL || TR) && ((turnTime + timeAddition) > howLongTurn) && LineGone) {TL = false; TR = false; LineGone = false;}
 
   int error = position - 1000;
 
@@ -108,7 +108,7 @@ pathFindingData navigator::pathFindingGreen(sensorStruct* sensorStructObject, in
       }
       int timeAddition = lastRight + lastLeft;
     }
-  else if ((TL || TR) && ((currentTime - turnTime) > howLongTurn + timeAddition) && LineGone) {TL = false; TR = false; LineGone = false;}
+  else if ((TL || TR) && ((turnTime + timeAddition) > timeAddition) && LineGone) {TL = false; TR = false; LineGone = false;}
 
   int error = position - 1000;
 

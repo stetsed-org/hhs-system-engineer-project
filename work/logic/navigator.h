@@ -12,10 +12,10 @@ unsigned int lastTime = 0;
 unsigned int turnTime = 0;
 unsigned int lastLeft = 0;
 unsigned int lastRight = 0;
-int howLongTurn = 100;
-int howLongReset = 200;
-int turnSpeedLeft = -2000;
-int turnSpeedRight = 4000;
+int howLongTurn = 200;
+int howLongReset = 250;
+int turnSpeedLeft = -3000;
+int turnSpeedRight = 5000;
 
 public:
   pathFindingData pathFindingBlack(sensorStruct*, int,int*,int);

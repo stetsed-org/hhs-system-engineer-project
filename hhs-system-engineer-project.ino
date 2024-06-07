@@ -8,7 +8,7 @@ unsigned int lineSensorValues[5];
 
 uint8_t selectedSensorIndex = 0;
 
-float MotorCorrectionFactor = 1.04;
+float MotorCorrectionFactor = 0.99;
 int lastErrorBlack = 0;
 int lastErrorGreen =0;
 
@@ -120,9 +120,9 @@ void loop() {
 
     motors.setSpeeds(temp.leftMotorSpeed,temp.rightMotorSpeed);
 
+  }
   // float motorcali = calibrateMotor(motors,350,encodersObject);
   // Serial1.println(motorcali,30);
-  }
 }
 
 void calibrateSensors()
