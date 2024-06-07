@@ -33,25 +33,29 @@ char colorDetection(sensorStruct* sensorStructPointer, int* lineSensorValues){
 
 pathFindingData navigator::pathFindingBlack(sensorStruct* sensorStructObject, int lastError, int* lineSensorValues, int maxSpeed){
   // Defining a max speed for the motors, can be a value between 0-400, caution against setting to high incase of motor damage. 
-  long currentTime = millis();
   pathFindingData pathFindingDataInstance;
+  static unsigned long lastTime, turnTime;
+  unsigned long currentTime = millis();
 
   // Reading the lineSensor's with readLine which returns a value between 0-4000
   int position = sensorStructObject -> lineSensorPointer -> readLine_but_good_and_not_colour_blind(lineSensorValues);
-  if (position < 0){ 
+  if (lineSensorValues[0] > 800 && !TL) {TL = true; turnTime = currentTime;}
+  if (lineSensorValues[4] > 800 && !TR) {TR = true; turnTime = currentTime;}
+  if (position < 0){ //it's not on line
       position = 1000; 
       LineGone = true; 
-      if(TL) {
-        position = 0;
+      if(TL && !TR) {
+        position = -800;
       }
-      if(TR) {
-        position = 2000;
+      if(TR && !TL) {
+        position = 2800;
       }
     }
-  //else if (TL || TR) TL = false, TR = false;
-  if (lineSensorValues[0] > 800) TL = true;
-  if (lineSensorValues[4] > 800) TR = true;
+  else if ((TL || TR) && ((currentTime - turnTime) > 200)) {TL = false; TR = false; Serial1.println("reset");}
 
+  // Serial1.println(currentTime);
+  // Serial1.println(turnTime);
+  // Serial1.println(currentTime - turnTime);
   // if(lineSensorValues[0] >= 800) TL = true, Serial1.println("T-l");
   // if(lineSensorValues[4] >= 800) TR = true, Serial1.println("T-r");
   //if (LineGone) position = 2000;
@@ -73,10 +77,12 @@ pathFindingData navigator::pathFindingBlack(sensorStruct* sensorStructObject, in
     */
   int proportional = 2;
   int derivitave = 1;
+  
 
-  int speedDiffrence = error * proportional + derivitave * (error - lastError);
+  int speedDiffrence = error * proportional + derivitave * ((error - lastError));
 
   //speedDiffrence /= 5;
+  lastTime = currentTime;
   pathFindingDataInstance.currentError = error;
 
   int tempLeftMotorSpeed = maxSpeed + speedDiffrence;
@@ -97,8 +103,12 @@ pathFindingData navigator::pathFindingBlack(sensorStruct* sensorStructObject, in
   //   pathFindingDataInstance.rightMotorSpeed
   // }
                                                                 //was 12000
-  pathFindingDataInstance.leftMotorSpeed = maxSpeed/2 + map(speedDiffrence, -800, 800, -maxSpeed/2, maxSpeed/2);
-  pathFindingDataInstance.rightMotorSpeed = maxSpeed/2 + map(-speedDiffrence, -800, 800, -maxSpeed/2, maxSpeed/2);
+  // pathFindingDataInstance.leftMotorSpeed = maxSpeed/2 + map(speedDiffrence, -800, 800, -maxSpeed/2, maxSpeed/2);
+  // pathFindingDataInstance.rightMotorSpeed = maxSpeed/2 + map(-speedDiffrence, -800, 800, -maxSpeed/2, maxSpeed/2);
+  int X = 100;
+
+  pathFindingDataInstance.leftMotorSpeed = maxSpeed - X + map(speedDiffrence, -800, 800, -X, X);
+  pathFindingDataInstance.rightMotorSpeed = maxSpeed - X + map(-speedDiffrence, -800, 800, -X, X);
 
   // pathFindingDataInstance.leftMotorSpeed = speedDiffrence;
   // pathFindingDataInstance.rightMotorSpeed = speedDiffrence;
@@ -108,20 +118,20 @@ pathFindingData navigator::pathFindingBlack(sensorStruct* sensorStructObject, in
 
   // Serial1.print(position);
   // Serial1.print("\t, ");
-  Serial1.print("PID:");
-  // Serial1.print("\t, ");
-  Serial1.print(speedDiffrence);
-  Serial1.print(",");
-  Serial1.print("const:");
+  // Serial1.print("PID:");
+  // // Serial1.print("\t, ");
+  // Serial1.print(speedDiffrence);
   // Serial1.print(",");
-  Serial1.println(0);
+  // Serial1.print("const:");
+  // // Serial1.print(",");
+  // Serial1.println(0);
   /* Return an instance of the pathFindingData struct, which is a struct designed 
    * to return data for this function which has the most recent error value, 
    * and the speeds the motors are wanted.
     */
 
   //pathFindingDataInstance.currentColor = 
-  long lastTime = currentTime;
+  
   pathFindingDataInstance.currentColor = colorDetection(sensorStructObject, lineSensorValues);
   return pathFindingDataInstance;
 }
