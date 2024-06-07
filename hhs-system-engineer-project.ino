@@ -8,7 +8,7 @@ unsigned int lineSensorValues[5];
 
 uint8_t selectedSensorIndex = 0;
 
-float MotorCorrectionFactor = 1.035;
+float MotorCorrectionFactor = 1.03;
 int lastError = 0;
 
 char imuOutBuffer[139];
@@ -32,10 +32,10 @@ navigator NavigatorInstance;
 
 Zumo32U4ButtonB buttonB;
 
-stateStorageStruct stateStorageStructObject;
-
-// Algemene setup
 void setup() {
+  stateStorageStruct stateStorageStructObject;
+  
+  // Algemene setup
   Wire.begin();
 
   Serial1.begin(57600);
@@ -43,6 +43,10 @@ void setup() {
   proxzumo.initFrontSensor();
   proximitySensorObject = proxSensor(&proxzumo);
 
+  //xbee.begin(57600);
+
+  Serial1.println();
+  
   // xbee.begin(4800);
   
   pinMode(A10, OUTPUT);
@@ -100,14 +104,14 @@ void loop() {
     stateStorageStructObject.currentColor[0] = temp.currentColor;
 
     //Serial1.println(temp.rightMotorSpeed);
-    temp.rightMotorSpeed = (int)((float)temp.rightMotorSpeed * MotorCorrectionFactor);
+    temp.rightMotorSpeed = (int)abs(((float)temp.rightMotorSpeed * 1.03));
 
-    motors.setSpeeds(temp.leftMotorSpeed,temp.rightMotorSpeed);
-/*
-  if (OCR1B < temp.leftMotorSpeed && OCR1B <= 325){
+    //motors.setSpeeds(temp.leftMotorSpeed,temp.rightMotorSpeed);
+
+  if (OCR1B < temp.leftMotorSpeed && OCR1B <= 350){
       OCR1B += 25;
     }
-  if (OCR1A < temp.rightMotorSpeed && OCR1A <= 325){
+  if (OCR1A < temp.rightMotorSpeed && OCR1A <= 350){
       OCR1A += 25;
     }
   if (OCR1B > temp.leftMotorSpeed && OCR1B >= 25){
@@ -116,7 +120,6 @@ void loop() {
   if (OCR1A > temp.rightMotorSpeed && OCR1A >= 25){
       OCR1A -= 25;
     }
-    */
  }
 
   else{
@@ -130,14 +133,14 @@ void loop() {
     stateStorageStructObject.currentColor[1] = stateStorageStructObject.currentColor[0];
     stateStorageStructObject.currentColor[0] = temp.currentColor;
     //Serial1.println(temp.rightMotorSpeed);
-    temp.rightMotorSpeed = (int)((float)temp.rightMotorSpeed * MotorCorrectionFactor);
+    temp.rightMotorSpeed = (int)abs(((float)temp.rightMotorSpeed * 1.03));
 
-    motors.setSpeeds(temp.leftMotorSpeed,temp.rightMotorSpeed);
-/*
-  if (OCR1B < temp.leftMotorSpeed && OCR1B <= 325){
+    //motors.setSpeeds(temp.leftMotorSpeed,temp.rightMotorSpeed);
+
+  if (OCR1B < temp.leftMotorSpeed && OCR1B <= 350){
       OCR1B += 25;
     }
-  if (OCR1A < temp.rightMotorSpeed && OCR1A <= 325){
+  if (OCR1A < temp.rightMotorSpeed && OCR1A <= 350){
       OCR1A += 25;
     }
   if (OCR1B > temp.leftMotorSpeed && OCR1B >= 25){
@@ -146,9 +149,8 @@ void loop() {
   if (OCR1A > temp.rightMotorSpeed && OCR1A >= 25){
       OCR1A -= 25;
     }
-  */
-  }
 
+  }
   //float output = calibrateMotor(motors,350,encodersObject);
   //Serial1.println(output,30);
 
