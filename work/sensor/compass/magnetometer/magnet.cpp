@@ -1,3 +1,5 @@
+#include "magnet.h"
+
 void Magnetometer::pvt_RetrieveData() {
 	// if new data ready
 	if (m_InterfacePTR->magDataReady())
@@ -10,6 +12,10 @@ void Magnetometer::pvt_RetrieveData() {
 		m_Vector.y = m_InterfacePTR->m.y;
 		m_Vector.z = m_InterfacePTR->m.z;
 	}
+}
+
+void Magnetometer::pvt_DebugRead() {
+  Serial1.println("M\n" + m_Vector.x + '\n' + m_Vector.y + '\n' + m_Vector.z + '\n' + 'm');
 }
 
 // written by: Erynn 'foorpyxof' Scholtes | 2024 NSE Zumo project

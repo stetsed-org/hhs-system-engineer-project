@@ -54,6 +54,12 @@ class CompassBase {
 		 * its respective sensor
 		 */
 		virtual void pvt_RetrieveData() = 0;
+
+    /**
+		 * Prints debug info.
+		 * (The sensor values)
+		 */
+		virtual void pvt_DebugRead() = 0;
 	
 	public: 
 		/**
@@ -70,13 +76,7 @@ class CompassBase {
 		 * Basically: This method returns the current x,y,z (Vector3)
 		 * for the sensor you call this method on.
 		 */
-		Vector3 Values();
-		
-		/**
-		 * Prints debug info.
-		 * Currently only the type of sensor that is detected.
-		 */
-		void PrintDebugInfo();
+		Vector3 read();
 				  
 	// methods are defined in attached file, 'compassbase.cpp'
 };

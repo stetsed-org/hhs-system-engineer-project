@@ -15,10 +15,11 @@ class Accelerometer : private CompassBase {
 		 * has new data available, and if so, it copies it into m_Vector
 		 */
 		void pvt_RetrieveData() override;
+    
+    void pvt_DebugRead() override;
 	public:
-		using CompassBase::CompassBase;
-		using CompassBase::Values;
-		using CompassBase::PrintDebugInfo;
+		using ICompassBase::ICompassBase;
+		using ICompassBase::read;
 };
 
 #include "accel.cpp"

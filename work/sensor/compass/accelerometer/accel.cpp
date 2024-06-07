@@ -1,3 +1,5 @@
+#include "accel.h"
+
 void Accelerometer::pvt_RetrieveData() {
 	// if new data ready
 	if (m_InterfacePTR->accDataReady()) 
@@ -10,6 +12,10 @@ void Accelerometer::pvt_RetrieveData() {
 		m_Vector.y = m_InterfacePTR->a.y;
 		m_Vector.z = m_InterfacePTR->a.z;
 	}
+}
+
+void Accelerometer::pvt_DebugRead() {
+  Serial1.println("A\n" + m_Vector.x + '\n' + m_Vector.y + '\n' + m_Vector.z + '\n' + 'a');
 }
 
 // written by: Erynn 'foorpyxof' Scholtes | 2024 NSE Zumo project

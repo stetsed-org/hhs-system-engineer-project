@@ -23,13 +23,32 @@ char imuOutBuffer[139];
 #define RECHTS OCR1A
 #define LINKS OCR1B
 
-//auto& xbee = Serial;
 
+// Sensors Declare
+Zumo32U4ProximitySensors proxzumo;
+Zumo32U4IMU imuzumo;
+proxSensor proximitySensorObject;
+CompatibleEncoders encodersObject;
+linesensors lineSensorObject;
+sensorStruct sensorStructObject;
+
+// Motors Setup
+Zumo32U4Motors motors;
+
+
+
+// Algemene setup
 void setup() {
   Wire.begin();
 
   Serial1.begin(4800);
   Serial1.println("Zumo Active, Serial1 Output");
+  proxzumo.initFrontSensor();
+  proximitySensorObject = proxSensor(&proxzumo);
+  Accelerometer accelerometerObject(&imuzumo);
+  Gyroscope gyroscopeObject(&imuzumo);
+  Magnetometer magnetometerObject(&imuzumo);
+
 
   // xbee.begin(4800);
   
@@ -40,6 +59,14 @@ void setup() {
   digitalWrite(16, LOW);
   digitalWrite(15, LOW);
   SetupTimer1();
+
+  // Store the sensor Struct
+  sensorStructObject.proximitySensorPointer = &proximitySensorObject;
+  sensorStructObject.encodersPointer = &encodersObject;
+  sensorStructObject.lineSensorPointer = &lineSensorObject;
+  sensorStructObject.gyroscopePointer = &gyroscopeObject;
+  sensorStructObject.magnetometerPointer = &magnetometerObject;
+  sensorStructObject.accelerometerPointer = &accelerometerObject;
 
   Serial.println();
 
@@ -63,29 +90,9 @@ void setup() {
 }
 
 void loop() {
-  //if(Serial1.available()){
-    //readserial(test,speed);
-  //}
-  accelData = accel->Values();
-  gyroData = gyro->Values();
-  magnetData = magnet->Values();
+    //if (calibratie){
+    //  float calibratie = calibrateMotor(motors,200,encodersObject); 
+    //  Serial1.println(calibratie);
+    //  };
 
-  printCompassValues();
-}
-
-void printCompassValues() {
-  sprintf(imuOutBuffer, "%s\r\n%s%d\r\n%s%d\r\n%s%d\r\n%s%d\r\n%s%d\r\n%s%d\r\n%s%d\r\n%s%d\r\n%s%d\r\n%s",
-    "--------------------",
-    "aX: ", accelData.x,
-    "aY: ", accelData.y,
-    "aZ: ", accelData.z,
-    "gX: ", gyroData.x,
-    "gY: ", gyroData.y,
-    "gZ: ", gyroData.z,
-    "mX: ", magnetData.x,
-    "mY: ", magnetData.y,
-    "mZ: ", magnetData.z,
-    "--------------------");
-    
-  Serial1.println(imuOutBuffer);
-}
+};
