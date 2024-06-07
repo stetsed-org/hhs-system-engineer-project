@@ -7,23 +7,14 @@
 char colorDetection(sensorStruct* sensorStructPointer, int* lineSensorValues){
     //sensorStructPointer -> lineSensorPointer -> readCalibrated(lineSensorValues);
     // Left Middle * 0.25 + Middle + Right Middle * 0.25
-    int value = (int)(lineSensorValues[1] + lineSensorValues[2] + lineSensorValues[3]);
+    int value = (int)(lineSensorValues[2]);
     //Serial1.println((String)value);
     //Serial1.println("Value: " + (String)value);
 
-    if (value < 800){
+    if ((value < 400) && (75 < value)){
         //Serial1.println("Color is green?");
         return 'g';
-      }
-    
-    //else if (value > 400 && value < 500){
-    //    Serial1.println("Color is probally gray");
-    //    return 'y';
-    //}
-    else if (value >= 800){  
-        //Serial1.println("Color is probally black");
-        return 'b';
-      }
+    }
 
     else {
       return 'b';
@@ -34,103 +25,105 @@ char colorDetection(sensorStruct* sensorStructPointer, int* lineSensorValues){
 pathFindingData navigator::pathFindingBlack(sensorStruct* sensorStructObject, int lastError, int* lineSensorValues, int maxSpeed){
   // Defining a max speed for the motors, can be a value between 0-400, caution against setting to high incase of motor damage. 
   pathFindingData pathFindingDataInstance;
-  static unsigned long lastTime, turnTime;
   unsigned long currentTime = millis();
+  int timeAddition;
 
   // Reading the lineSensor's with readLine which returns a value between 0-4000
   int position = sensorStructObject -> lineSensorPointer -> readLine_but_good_and_not_colour_blind(lineSensorValues);
-  if (lineSensorValues[0] > 800 && !TL) {TL = true; turnTime = currentTime;}
-  if (lineSensorValues[4] > 800 && !TR) {TR = true; turnTime = currentTime;}
+  if (lineSensorValues[0] > 800 && !TL) {TL = true; lastLeft = currentTime;}
+  if (lineSensorValues[4] > 800 && !TR) {TR = true; lastRight = currentTime;}
+  //we have detetectd a turn, we are on a line, the reset time has pased, we detected a turn
+  if (TL && position > 0 && (currentTime - lastLeft) > howLongReset && lastLeft != 0 ){
+    TL = false;
+    lastLeft = 0;
+  }
+  if (TR && position > 0 && (currentTime - lastRight) > howLongReset && lastRight != 0 ){
+    TR = false;
+    lastRight = 0;
+  }
+
   if (position < 0){ //it's not on line
       position = 1000; 
+      if ((TR || TL) && !LineGone) turnTime = currentTime;
       LineGone = true; 
       if(TL && !TR) {
-        position = -800;
+        position = turnSpeedLeft;
       }
       if(TR && !TL) {
-        position = 2800;
+        position = turnSpeedRight;
       }
+      int timeAddition = lastRight + lastLeft;
     }
-  else if ((TL || TR) && ((currentTime - turnTime) > 200)) {TL = false; TR = false; Serial1.println("reset");}
+    //we are on a line, we have a turn, turning for so long?, we don't have a line
+  else if ((TL || TR) && ((currentTime - turnTime) > howLongTurn + timeAddition) && LineGone) {TL = false; TR = false; LineGone = false;}
 
-  // Serial1.println(currentTime);
-  // Serial1.println(turnTime);
-  // Serial1.println(currentTime - turnTime);
-  // if(lineSensorValues[0] >= 800) TL = true, Serial1.println("T-l");
-  // if(lineSensorValues[4] >= 800) TR = true, Serial1.println("T-r");
-  //if (LineGone) position = 2000;
-
-
-  //Serial1.println(position);
-
-  // Subtract 2000, so a negative number means we need to go left and a positive number means we need to go right
   int error = position - 1000;
 
-  /* PID Controller, you can set proportional value and derivitave value to diffrent settings
-    * Default values: 4, 6
-    * Default values have been chosen because they seemed to give a good balance between accuracy of following the line
-    * And of speed.
-    *
-    * And with these values, the current error value and the previous error value given to the function, which is
-    * stored in stateStorage struct for the program. And the defined values it will calculate the speed
-    * differentional
-    */
   int proportional = 2;
   int derivitave = 1;
-  
 
+  //PD
   int speedDiffrence = error * proportional + derivitave * ((error - lastError));
 
   //speedDiffrence /= 5;
+  pathFindingDataInstance.currentError = error;
+  
+  int X = 110;
+
+  pathFindingDataInstance.leftMotorSpeed = maxSpeed - X + map(speedDiffrence, -800, 800, -X, X);
+  pathFindingDataInstance.rightMotorSpeed = maxSpeed - X + map(-speedDiffrence, -800, 800, -X, X); 
+  
+  pathFindingDataInstance.currentColor = colorDetection(sensorStructObject, lineSensorValues);
+  return pathFindingDataInstance;
+}
+
+pathFindingData navigator::pathFindingGreen(sensorStruct* sensorStructObject, int lastError, int* lineSensorValues, int maxSpeed){
+  // Defining a max speed for the motors, can be a value between 0-400, caution against setting to high incase of motor damage. 
+  pathFindingData pathFindingDataInstance;
+  unsigned long currentTime = millis();
+  int timeAddition;
+
+  // Reading the lineSensor's with readLine which returns a value between 0-4000
+  int position = sensorStructObject -> lineSensorPointer -> readLine_but_good_and_not_colour_blind(lineSensorValues);
+  if ((lineSensorValues[0] > 75) && (400 > lineSensorValues[0]) && !TL) {TL = true; lastLeft = currentTime;}
+  if ((lineSensorValues[4] > 75) && (400 > lineSensorValues[4]) && !TR) {TR = true; lastRight = currentTime;}
+  if (TL && position > 0 && (currentTime - lastLeft) > howLongReset && lastLeft != 0 ){
+    TL = false;
+    lastLeft = 0;
+  }
+  if (TR && position > 0 && (currentTime - lastRight) > howLongReset && lastRight != 0 ){
+    TR = false;
+    lastRight = 0;
+  }
+
+  if (position < 0){ //it's not on line
+      position = 1000;
+      if ((TR || TL) && !LineGone) turnTime = currentTime;
+      LineGone = true; 
+      if(TL && !TR) {
+        position = turnSpeedLeft;
+      }
+      if(TR && !TL) {
+        position = turnSpeedRight;
+      }
+      int timeAddition = lastRight + lastLeft;
+    }
+  else if ((TL || TR) && ((currentTime - turnTime) > howLongTurn + timeAddition) && LineGone) {TL = false; TR = false; LineGone = false;}
+
+  int error = position - 1000;
+
+  int proportional = 2;
+  int derivitave = 1;
+  
+  int speedDiffrence = error * proportional + derivitave * ((error - lastError));
+
   lastTime = currentTime;
   pathFindingDataInstance.currentError = error;
 
-  int tempLeftMotorSpeed = maxSpeed + speedDiffrence;
-  int tempRightMotorSpeed = maxSpeed - speedDiffrence;
-  
-  //if (speedDiffrence == 0) speedDiffrence = maxSpeed; 
-  /* Makes sure we are not given a value lower than 0 and 
-   * higher than maxspeed to the motors for return.
-  *
-  */
-
-  // if(speedDiffrence > 0){ //we should go to the right
-
-  // } else if(speedDiffrence < 0){ //we should go to the left
-
-  // } else{ //we should be going straight
-  //   pathFindingDataInstance.leftMotorSpeed = max
-  //   pathFindingDataInstance.rightMotorSpeed
-  // }
-                                                                //was 12000
-  // pathFindingDataInstance.leftMotorSpeed = maxSpeed/2 + map(speedDiffrence, -800, 800, -maxSpeed/2, maxSpeed/2);
-  // pathFindingDataInstance.rightMotorSpeed = maxSpeed/2 + map(-speedDiffrence, -800, 800, -maxSpeed/2, maxSpeed/2);
-  int X = 100;
+  int X = 75;
 
   pathFindingDataInstance.leftMotorSpeed = maxSpeed - X + map(speedDiffrence, -800, 800, -X, X);
   pathFindingDataInstance.rightMotorSpeed = maxSpeed - X + map(-speedDiffrence, -800, 800, -X, X);
-
-  // pathFindingDataInstance.leftMotorSpeed = speedDiffrence;
-  // pathFindingDataInstance.rightMotorSpeed = speedDiffrence;
-
-  // -50 < pathFindingDataInstance.leftMotorSpeed < 50? : pathFindingDataInstance.leftMotorSpeed = maxSpeed;
-  // -50 < pathFindingDataInstance.rightMotorSpeed < 50? : pathFindingDataInstance.rightMotorSpeed = maxSpeed;
-
-  // Serial1.print(position);
-  // Serial1.print("\t, ");
-  // Serial1.print("PID:");
-  // // Serial1.print("\t, ");
-  // Serial1.print(speedDiffrence);
-  // Serial1.print(",");
-  // Serial1.print("const:");
-  // // Serial1.print(",");
-  // Serial1.println(0);
-  /* Return an instance of the pathFindingData struct, which is a struct designed 
-   * to return data for this function which has the most recent error value, 
-   * and the speeds the motors are wanted.
-    */
-
-  //pathFindingDataInstance.currentColor = 
   
   pathFindingDataInstance.currentColor = colorDetection(sensorStructObject, lineSensorValues);
   return pathFindingDataInstance;

@@ -8,8 +8,9 @@ unsigned int lineSensorValues[5];
 
 uint8_t selectedSensorIndex = 0;
 
-float MotorCorrectionFactor = 1.035;
-int lastError = 0;
+float MotorCorrectionFactor = 1.04;
+int lastErrorBlack = 0;
+int lastErrorGreen =0;
 
 char imuOutBuffer[139];
 
@@ -73,8 +74,7 @@ void setup() {
 };
 
 void loop() {  
-  //Serial1.println("Current Color State" + (String)stateStorageStructObject.currentColor);
- 
+  Serial1.println("Current Color State" + (String)stateStorageStructObject.currentColor);
   int blackCount = 0;
   int greenCount = 0;
   for(int i = 0; i < 5; ++i){
@@ -88,10 +88,10 @@ void loop() {
     }
   //Serial1.println(" ");
 
-  if (greenCount >= 2){
-    pathFindingData temp = NavigatorInstance.pathFindingBlack(&sensorStructObject,lastError,lineSensorValues,200);
+  if (greenCount >= 4){
+    pathFindingData temp = NavigatorInstance.pathFindingGreen(&sensorStructObject,lastErrorGreen,lineSensorValues,200);
  
-    lastError = temp.currentError;
+    lastErrorGreen = temp.currentError;
 
     stateStorageStructObject.currentColor[4] = stateStorageStructObject.currentColor[3];
     stateStorageStructObject.currentColor[3] = stateStorageStructObject.currentColor[2];
@@ -103,26 +103,12 @@ void loop() {
     temp.rightMotorSpeed = (int)((float)temp.rightMotorSpeed * MotorCorrectionFactor);
 
     motors.setSpeeds(temp.leftMotorSpeed,temp.rightMotorSpeed);
-/*
-  if (OCR1B < temp.leftMotorSpeed && OCR1B <= 325){
-      OCR1B += 25;
-    }
-  if (OCR1A < temp.rightMotorSpeed && OCR1A <= 325){
-      OCR1A += 25;
-    }
-  if (OCR1B > temp.leftMotorSpeed && OCR1B >= 25){
-      OCR1B -= 25;
-    }
-  if (OCR1A > temp.rightMotorSpeed && OCR1A >= 25){
-      OCR1A -= 25;
-    }
-    */
  }
 
   else{
-    pathFindingData temp = NavigatorInstance.pathFindingBlack(&sensorStructObject,lastError,lineSensorValues,350);
+    pathFindingData temp = NavigatorInstance.pathFindingBlack(&sensorStructObject,lastErrorBlack,lineSensorValues,350);
     
-    lastError = temp.currentError;
+    lastErrorBlack = temp.currentError;
 
     stateStorageStructObject.currentColor[4] = stateStorageStructObject.currentColor[3];
     stateStorageStructObject.currentColor[3] = stateStorageStructObject.currentColor[2];
@@ -133,25 +119,10 @@ void loop() {
     temp.rightMotorSpeed = (int)((float)temp.rightMotorSpeed * MotorCorrectionFactor);
 
     motors.setSpeeds(temp.leftMotorSpeed,temp.rightMotorSpeed);
-/*
-  if (OCR1B < temp.leftMotorSpeed && OCR1B <= 325){
-      OCR1B += 25;
-    }
-  if (OCR1A < temp.rightMotorSpeed && OCR1A <= 325){
-      OCR1A += 25;
-    }
-  if (OCR1B > temp.leftMotorSpeed && OCR1B >= 25){
-      OCR1B -= 25;
-    }
-  if (OCR1A > temp.rightMotorSpeed && OCR1A >= 25){
-      OCR1A -= 25;
-    }
-  */
+
+  // float motorcali = calibrateMotor(motors,350,encodersObject);
+  // Serial1.println(motorcali,30);
   }
-
-  //float output = calibrateMotor(motors,350,encodersObject);
-  //Serial1.println(output,30);
-
 }
 
 void calibrateSensors()

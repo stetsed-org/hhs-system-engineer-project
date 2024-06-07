@@ -54,7 +54,6 @@ int linesensors::readLine_but_good_and_not_colour_blind(unsigned int *sensor_val
             on_line = 1;
         }
 
-
         // only average in values that are above a noise threshold
         if(value > 50) {
             avg += (long)(value) * (i * 1000);
@@ -64,9 +63,7 @@ int linesensors::readLine_but_good_and_not_colour_blind(unsigned int *sensor_val
 
     if(!on_line)
     {
-
       return -1;
-
     }
 
     _lastValue = avg/sum;
