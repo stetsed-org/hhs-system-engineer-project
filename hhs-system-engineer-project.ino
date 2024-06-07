@@ -23,8 +23,6 @@ CompatibleEncoders encodersObject;
 linesensors lineSensorObject;
 sensorStruct sensorStructObject;
 
-MotorController motorControllerObject;
-
 // Motors Setup
 Zumo32U4Motors motors;
 
@@ -42,8 +40,8 @@ void setup() {
 
   Serial1.begin(57600);
   Serial1.println("Zumo Active, Serial1 Output");
-  // proxzumo.initFrontSensor();
-  // proximitySensorObject = proxSensor(&proxzumo);
+  proxzumo.initFrontSensor();
+  proximitySensorObject = proxSensor(&proxzumo);
 
   // xbee.begin(4800);
   
@@ -56,80 +54,55 @@ void setup() {
   SetupTimer1();
   
   // Note: We need to initialize, initializing from the constructor doesn't work?
-  // lineSensorObject.initFiveSensors();
+  lineSensorObject.initFiveSensors();
 
   // Store the sensor Struct
-  // sensorStructObject.proximitySensorPointer = &proximitySensorObject;
-  // sensorStructObject.encodersPointer = &encodersObject;
-  // sensorStructObject.lineSensorPointer = &lineSensorObject;
+  sensorStructObject.proximitySensorPointer = &proximitySensorObject;
+  sensorStructObject.encodersPointer = &encodersObject;
+  sensorStructObject.lineSensorPointer = &lineSensorObject;
   // sensorStructObject.gyroscopePointer = &gyroscopeObject;
   // sensorStructObject.magnetometerPointer = &magnetometerObject;
   // sensorStructObject.accelerometerPointer = &accelerometerObject; 
 
   Serial.println();
 
-  // calibrateSensors(); 
+  calibrateSensors(); 
 
-  // stateStorageStructObject.leftTurnActive = false;
-  // stateStorageStructObject.rightTurnActive = false;
+  stateStorageStructObject.leftTurnActive = false;
+  stateStorageStructObject.rightTurnActive = false;
 };
 
-void loop() {
-  if (Serial1.available() > 0) {
-    switch (Serial1.read())
-    {
-      case 'w':
-        motorControllerObject.setSpeed(200, 200);
-        Serial1.println("Speed: " + motorControllerObject.read().left + ' ' + motorControllerObject.read().right);
-        break;
-      case 'a':
-        motorControllerObject.setSpeed(-200, 200);
-        Serial1.println("Speed: " + motorControllerObject.read().left + ' ' + motorControllerObject.read().right);
-        break;
-      case 's':
-        motorControllerObject.setSpeed(-200, -200);
-        Serial1.println("Speed: " + motorControllerObject.read().left + ' ' + motorControllerObject.read().right);
-        break;
-      case 'd':
-        motorControllerObject.setSpeed(200, -200);
-        Serial1.println("Speed: " + motorControllerObject.read().left + ' ' + motorControllerObject.read().right);
-        break;
-      default:
-        motorControllerObject.stop();
-        Serial1.println("Speed: " + motorControllerObject.read().left + ' ' + motorControllerObject.read().right);
-        break;
-    }
-  }
+void loop() {  
   //Serial1.println("Current Color State" + (String)stateStorageStructObject.currentColor);
  
-  // int blackCount = 0;
-  // int greenCount = 0;
-  // for(int i = 0; i < 5; ++i){
+  int blackCount = 0;
+  int greenCount = 0;
+  for(int i = 0; i < 5; ++i){
     //Serial1.print((String)i + " " + (String)stateStorageStructObject.currentColor[i] + " ");
-      // if (stateStorageStructObject.currentColor[i] == 'b'){
-          // blackCount += 1;
-        // }
-      // if (stateStorageStructObject.currentColor[i] == 'g'){
-          // greenCount += 1;
-        // }
-    // }
+      if (stateStorageStructObject.currentColor[i] == 'b'){
+          blackCount += 1;
+        }
+      if (stateStorageStructObject.currentColor[i] == 'g'){
+          greenCount += 1;
+        }
+    }
   //Serial1.println(" ");
 
-  // if (greenCount >= 2){
-  //   pathFindingData temp = NavigatorInstance.pathFindingBlack(&sensorStructObject,lastError,lineSensorValues,200);
+  if (greenCount >= 2){
+    pathFindingData temp = NavigatorInstance.pathFindingBlack(&sensorStructObject,lastError,lineSensorValues,200);
  
-  //   lastError = temp.currentError;
+    lastError = temp.currentError;
 
-  //   stateStorageStructObject.currentColor[4] = stateStorageStructObject.currentColor[3];
-  //   stateStorageStructObject.currentColor[3] = stateStorageStructObject.currentColor[2];
-  //   stateStorageStructObject.currentColor[2] = stateStorageStructObject.currentColor[1];
-  //   stateStorageStructObject.currentColor[1] = stateStorageStructObject.currentColor[0];
-  //   stateStorageStructObject.currentColor[0] = temp.currentColor;
+    stateStorageStructObject.currentColor[4] = stateStorageStructObject.currentColor[3];
+    stateStorageStructObject.currentColor[3] = stateStorageStructObject.currentColor[2];
+    stateStorageStructObject.currentColor[2] = stateStorageStructObject.currentColor[1];
+    stateStorageStructObject.currentColor[1] = stateStorageStructObject.currentColor[0];
+    stateStorageStructObject.currentColor[0] = temp.currentColor;
 
-  //   //Serial1.println(temp.rightMotorSpeed);
-  //   temp.rightMotorSpeed = (int)((float)temp.rightMotorSpeed * MotorCorrectionFactor);
+    //Serial1.println(temp.rightMotorSpeed);
+    temp.rightMotorSpeed = (int)((float)temp.rightMotorSpeed * MotorCorrectionFactor);
 
-  //   motors.setSpeeds(temp.leftMotorSpeed,temp.rightMotorSpeed);
+    motors.setSpeeds(temp.leftMotorSpeed,temp.rightMotorSpeed);
 /*
   if (OCR1B < temp.leftMotorSpeed && OCR1B <= 325){
       OCR1B += 25;
@@ -144,22 +117,22 @@ void loop() {
       OCR1A -= 25;
     }
     */
-//  }
+ }
 
-  // else{
-  //   pathFindingData temp = NavigatorInstance.pathFindingBlack(&sensorStructObject,lastError,lineSensorValues,350);
+  else{
+    pathFindingData temp = NavigatorInstance.pathFindingBlack(&sensorStructObject,lastError,lineSensorValues,350);
     
-  //   lastError = temp.currentError;
+    lastError = temp.currentError;
 
-  //   stateStorageStructObject.currentColor[4] = stateStorageStructObject.currentColor[3];
-  //   stateStorageStructObject.currentColor[3] = stateStorageStructObject.currentColor[2];
-  //   stateStorageStructObject.currentColor[2] = stateStorageStructObject.currentColor[1];
-  //   stateStorageStructObject.currentColor[1] = stateStorageStructObject.currentColor[0];
-    // stateStorageStructObject.currentColor[0] = temp.currentColor;
+    stateStorageStructObject.currentColor[4] = stateStorageStructObject.currentColor[3];
+    stateStorageStructObject.currentColor[3] = stateStorageStructObject.currentColor[2];
+    stateStorageStructObject.currentColor[2] = stateStorageStructObject.currentColor[1];
+    stateStorageStructObject.currentColor[1] = stateStorageStructObject.currentColor[0];
+    stateStorageStructObject.currentColor[0] = temp.currentColor;
     //Serial1.println(temp.rightMotorSpeed);
-    // temp.rightMotorSpeed = (int)((float)temp.rightMotorSpeed * MotorCorrectionFactor);
+    temp.rightMotorSpeed = (int)((float)temp.rightMotorSpeed * MotorCorrectionFactor);
 
-    // motors.setSpeeds(temp.leftMotorSpeed,temp.rightMotorSpeed);
+    motors.setSpeeds(temp.leftMotorSpeed,temp.rightMotorSpeed);
 /*
   if (OCR1B < temp.leftMotorSpeed && OCR1B <= 325){
       OCR1B += 25;
@@ -174,7 +147,7 @@ void loop() {
       OCR1A -= 25;
     }
   */
-  // }
+  }
 
   //float output = calibrateMotor(motors,350,encodersObject);
   //Serial1.println(output,30);
