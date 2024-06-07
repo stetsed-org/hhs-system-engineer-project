@@ -3,22 +3,20 @@
 
 
 
-MotorController::MotorController(){
-    leftSpeed = 0;
-    rightSpeed = 0;
-    Serial1.println("Object gemaakt");
+MotorController::MotorController() {}
+
+
+void MotorController::setSpeed(int newLeft, int newRight){
+  newLeft = constrain(newLeft, -350, 350);
+  newRight = constrain(newRight, -350, 350);
+  motors.setSpeeds(newLeft, newRight);
 }
 
-MotorController::~MotorController(){
-    Serial1.println("Ojbect gedeconstrueerd");
-}
-
-
-void MotorController::setSpeed(int leftSpeed, int rightSpeed){
-    motors.setSpeeds(leftSpeed, rightSpeed);
+motorSpeeds MotorController::read() {
+  return { OCR1B, OCR1A };
 }
 
 void MotorController::stop(){
-    motors.setSpeeds(0, 0);
+  motors.setSpeeds(0, 0);
 }
 
