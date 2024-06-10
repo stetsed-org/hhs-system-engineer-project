@@ -40,6 +40,6 @@ class MotorController : public Sensor {
     void stop();
 };
 
-//#include "MotorController.cpp"
+#include "MotorController.cpp"
 
 #endif // MOTORCONTROLLER_H

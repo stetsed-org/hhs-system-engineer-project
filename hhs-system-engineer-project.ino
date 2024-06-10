@@ -24,7 +24,7 @@ linesensors lineSensorObject;
 sensorStruct sensorStructObject;
 
 // Motors Setup
-MotorController motorController;
+MotorController motorcon;
 
 // Initialize Navigator
 navigator NavigatorInstance;
@@ -74,7 +74,7 @@ void setup() {
 
   stateStorageStructObject.leftTurnActive = false;
   stateStorageStructObject.rightTurnActive = false;
-};
+};  
 
 void loop() {  
   //Serial1.println("Current Color State" + (String)stateStorageStructObject.currentColor);
@@ -166,14 +166,14 @@ void calibrateSensors()
   {
     if (i > 30 && i <= 90)
     {
-      motorController.setSpeed(-200, 200);
+      motorcon.setSpeed(-200, 200);
     }
     else
     {
-      motorController.setSpeed(200, -200);
+      motorcon.setSpeed(200, -200);
     }
 
     sensorStructObject.lineSensorPointer -> calibrate();
   }
-  motorController.setSpeed(0, 0);
+  motorcon.setSpeed(0, 0);
 }

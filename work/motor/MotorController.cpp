@@ -1,5 +1,4 @@
 #include "../headers.hpp"
-#include "MotorController.h"
 
 
 //! \brief MotorController constructor
