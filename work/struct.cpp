@@ -8,7 +8,7 @@
 struct stateStorageStruct{
   bool leftTurnActive;
   bool rightTurnActive;
-  char currentColor[5] = {'b','b','b','b','b'};
+  char currentColor[10] = {'b','b','b','b','b','b','b','b','b','b'};
 } ;
 
 struct sensorStruct{

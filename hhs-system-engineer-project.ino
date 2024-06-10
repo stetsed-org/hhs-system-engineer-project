@@ -77,7 +77,7 @@ void loop() {
   // Serial1.println("Current Color State" + (String)stateStorageStructObject.currentColor);
   int blackCount = 0;
   int greenCount = 0;
-  for(int i = 0; i < 5; ++i){
+  for(int i = 0; i < 10; ++i){
     //Serial1.print((String)i + " " + (String)stateStorageStructObject.currentColor[i] + " ");
       if (stateStorageStructObject.currentColor[i] == 'b'){
           blackCount += 1;
@@ -90,7 +90,7 @@ void loop() {
 
   pathFindingData temp;
 
-  if (greenCount >= 4){
+  if (greenCount >= 6){
     temp = NavigatorInstance.pathFindingOnColor(lineColor::Green, &sensorStructObject,lastErrorGreen,lineSensorValues);
  
     lastErrorGreen = temp.currentError;
@@ -103,8 +103,8 @@ void loop() {
   }
 
 
-  if (temp.currentColor != 'n') {
-    for (short i=4; i>0; i--) {
+  if (!(temp.currentColor == 'n')) {
+    for (short i=9; i>0; i--) {
     stateStorageStructObject.currentColor[i] = stateStorageStructObject.currentColor[i-1];
     }
     stateStorageStructObject.currentColor[0] = temp.currentColor;

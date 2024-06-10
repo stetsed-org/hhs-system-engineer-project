@@ -63,7 +63,7 @@ int linesensors::readLine_but_good_and_not_colour_blind(unsigned int *sensor_val
 
     if(!on_line)
     {
-      return -1;
+      return -4200;
     }
 
     _lastValue = avg/sum;

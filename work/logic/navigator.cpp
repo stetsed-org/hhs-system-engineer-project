@@ -11,12 +11,12 @@ char colorDetection(sensorStruct* sensorStructPointer, int* lineSensorValues){
     //Serial1.println((String)value);
     //Serial1.println("Value: " + (String)value);
 
-    if ((value < 250) && (75 < value)){
+    if ((75 < value) && (value < 300)){
         //Serial1.println("Color is green?");
         return 'g';
     }
 
-    else if (value > 750) {
+    else if (value > 300) {
       return 'b';
     }
     return 'n';
@@ -26,8 +26,9 @@ pathFindingData navigator::pathFindingOnColor(lineColor color, sensorStruct* sen
   // Defining a max speed for the motors, can be a value between 0-400, caution against setting to high incase of motor damage. 
   pathFindingData pathFindingDataInstance;
   unsigned long currentTime = millis();
-  int timeAddition, X, maxSpeed;
-
+  int timeAddition, X, maxSpeed, mincolour;
+  static bool LineGoneLeft, LineGoneRight;
+  static int turnTimeLeft, turnTimeRight;
   // Reading the lineSensor's with readLine which returns a value between 0-4000
   int position = sensorStructObject -> lineSensorPointer -> readLine_but_good_and_not_colour_blind(lineSensorValues);
 
@@ -37,42 +38,54 @@ pathFindingData navigator::pathFindingOnColor(lineColor color, sensorStruct* sen
       X = 110;
       maxSpeed = 350;
       howLongReset = 200;
+      mincolour = 600;
       break;
     
     case lineColor::Green:
       X = 75;
       maxSpeed = 200;
-      howLongReset = 400;
+      howLongReset = 600;
+      mincolour = 125;
       break;
   }
 
-  if ((lineSensorValues[0] > 125) && !TL) {TL = true; lastLeft = currentTime;}
-  if ((lineSensorValues[4] > 125) && !TR) {TR = true; lastRight = currentTime;}
+  if ((lineSensorValues[0] > mincolour) && !TL) {TL = true; lastLeft = currentTime;}
+  if ((lineSensorValues[4] > mincolour) && !TR) {TR = true; lastRight = currentTime;}
 
-  //we have detetectd a turn, we are on a line, the reset time has pased, we detected a turn
-  if (TL && position > 0 && (currentTime - lastLeft) > howLongReset && lastLeft != 0 ){
+  //we have detetectd a turn, we are on a line, the reset time has pased
+  if (TL && (position >= 0) && ((currentTime - lastLeft) > howLongReset)){
     TL = false;
     lastLeft = 0;
   }
-  if (TR && position > 0 && (currentTime - lastRight) > howLongReset && lastRight != 0 ){
+  if (TR && (position >= 0) && ((currentTime - lastRight) > howLongReset)){
     TR = false;
     lastRight = 0;
   }
 
-  if (position < 0){ //it's not on line
+  if (position == -4200){ //it's not on line
       position = 1000; 
-      if ((TR || TL) && !LineGone) turnTime = currentTime;
-      LineGone = true; 
+      if (TR && !LineGoneLeft) turnTimeLeft = currentTime;
+      LineGoneLeft = true; 
+
+      if (TL && !LineGoneRight) turnTimeRight = currentTime;
+      LineGoneRight = true; 
+
       if(TL && !TR) {
         position = turnSpeedLeft;
       }
-      if(TR && !TL) {
+      else if(TR && !TL) {
         position = turnSpeedRight;
       }
-      int timeAddition = lastRight + lastLeft;
     }
     //we are on a line, we have a turn, turning for so long?, we don't have a line
-  else if ((TL || TR) && ((currentTime - turnTime) > howLongTurn + timeAddition) && LineGone) {TL = false; TR = false; LineGone = false;}
+  else 
+  {
+    if (TL && TR) TL=false,TR=false;
+    if (TL && (currentTime > (turnTimeLeft + howLongTurn)) && LineGoneLeft) TL = false, LineGoneLeft = false;
+    
+    if (TR && (currentTime > (turnTimeRight + howLongTurn)) && LineGoneRight) TR = false, LineGoneRight = false;
+
+  }
 
   int error = position - 1000;
 
