@@ -9,7 +9,6 @@ class linesensors : public Zumo32U4LineSensors, public Sensor{
         void readValues();
         void serialPrintValues();
         unsigned int* read();
-        int readLine_but_good_and_not_colour_blind(unsigned int *sensor_values, unsigned char readMode = QTR_EMITTERS_ON, unsigned char white_line = 0);
 
     private:
         //sensorReference Zumo32U4LineSensors; //ignore problem, for now... ;)

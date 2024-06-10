@@ -26,6 +26,7 @@ float calibrateMotor(Zumo32U4Motors motor, int Speed, CompatibleEncoders encoder
 
   delay(10000);
 
+
   int leftvalue = encoder.ReadLeft();
   int rightvalue = encoder.ReadRight();
   Serial1.println(leftvalue);
