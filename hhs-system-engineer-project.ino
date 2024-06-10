@@ -14,6 +14,15 @@ int lastErrorGreen =0;
 
 char imuOutBuffer[139];
 
+int readyLeft = false; //new
+int readyRight = false; //new
+
+bool readyLeftForReal = false;
+bool readyRightForReal = false;
+
+long rightDetectTime = 0;
+long leftDetectTime = 0;
+
 #define RECHTS OCR1A
 #define LINKS OCR1B
 
@@ -109,7 +118,55 @@ void loop() {
     }
     stateStorageStructObject.currentColor[0] = temp.currentColor;
   }
+//new start
+if ((lineSensorValues[0] < 300) && (200 < lineSensorValues[0])){
+  readyLeft++;
+  if (readyLeft >= 5){
+    readyLeftForReal = true;
+    leftDetectTime = millis();
+  }
+}
+else readyLeft = 0;
+if ((lineSensorValues[4] < 300) && (160 < lineSensorValues[4])){
+  readyRight++;
+  if (readyRight >= 5)
+  readyRightForReal = true;
+  rightDetectTime = millis();
+}
+else readyRight = 0;
 
+if ( readyLeftForReal && lineSensorValues[0]> 750){
+  encodersObject.ResetValues();
+  while(encodersObject.getCountsRight() < (910)){
+    motors.setRightSpeed(350);
+    motors.setLeftSpeed(-200);
+  }
+  readyLeft = false;
+  readyLeftForReal = false;
+  leftDetectTime = 0;
+}
+else if((millis()- leftDetectTime) >= 2000 && leftDetectTime != 0){
+  leftDetectTime = 0;
+  readyLeft = 0;
+  readyLeftForReal = 0;
+}
+if (readyRightForReal && lineSensorValues[4]> 750){
+  encodersObject.ResetValues();
+  while(encodersObject.getCountsLeft() < (910)){
+    motors.setLeftSpeed(350);
+    motors.setRightSpeed(-200);
+  }
+  readyRight = false;
+  readyRightForReal = false;
+  rightDetectTime = 0;
+}
+else if((millis()- rightDetectTime) >= 2000 && rightDetectTime != 0){
+  rightDetectTime = 0;
+  readyRight = 0;
+  readyRight = 0;
+}
+
+//new end
   //Serial1.println(temp.rightMotorSpeed);
   temp.rightMotorSpeed = (int)((float)temp.rightMotorSpeed * MotorCorrectionFactor);
 

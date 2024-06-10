@@ -48,7 +48,7 @@ pathFindingData navigator::pathFindingOnColor(lineColor color, sensorStruct* sen
       mincolour = 125;
       break;
   }
-
+  
   if ((lineSensorValues[0] > mincolour) && !TL) {TL = true; lastLeft = currentTime;}
   if ((lineSensorValues[4] > mincolour) && !TR) {TR = true; lastRight = currentTime;}
 
