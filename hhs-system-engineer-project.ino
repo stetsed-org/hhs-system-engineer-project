@@ -74,7 +74,7 @@ void setup() {
 };
 
 void loop() {  
-  Serial1.println("Current Color State" + (String)stateStorageStructObject.currentColor);
+  // Serial1.println("Current Color State" + (String)stateStorageStructObject.currentColor);
   int blackCount = 0;
   int greenCount = 0;
   for(int i = 0; i < 5; ++i){
@@ -88,41 +88,33 @@ void loop() {
     }
   //Serial1.println(" ");
 
+  pathFindingData temp;
+
   if (greenCount >= 4){
-    pathFindingData temp = NavigatorInstance.pathFindingGreen(&sensorStructObject,lastErrorGreen,lineSensorValues,200);
+    temp = NavigatorInstance.pathFindingOnColor(lineColor::Green, &sensorStructObject,lastErrorGreen,lineSensorValues);
  
     lastErrorGreen = temp.currentError;
-
-    stateStorageStructObject.currentColor[4] = stateStorageStructObject.currentColor[3];
-    stateStorageStructObject.currentColor[3] = stateStorageStructObject.currentColor[2];
-    stateStorageStructObject.currentColor[2] = stateStorageStructObject.currentColor[1];
-    stateStorageStructObject.currentColor[1] = stateStorageStructObject.currentColor[0];
-    stateStorageStructObject.currentColor[0] = temp.currentColor;
-
-    //Serial1.println(temp.rightMotorSpeed);
-    temp.rightMotorSpeed = (int)((float)temp.rightMotorSpeed * MotorCorrectionFactor);
-
-    motors.setSpeeds(temp.leftMotorSpeed,temp.rightMotorSpeed);
- }
+  }
 
   else{
-    pathFindingData temp = NavigatorInstance.pathFindingBlack(&sensorStructObject,lastErrorBlack,lineSensorValues,350);
+    temp = NavigatorInstance.pathFindingOnColor(lineColor::Black, &sensorStructObject,lastErrorBlack,lineSensorValues);
     
     lastErrorBlack = temp.currentError;
-
-    stateStorageStructObject.currentColor[4] = stateStorageStructObject.currentColor[3];
-    stateStorageStructObject.currentColor[3] = stateStorageStructObject.currentColor[2];
-    stateStorageStructObject.currentColor[2] = stateStorageStructObject.currentColor[1];
-    stateStorageStructObject.currentColor[1] = stateStorageStructObject.currentColor[0];
-    stateStorageStructObject.currentColor[0] = temp.currentColor;
-    //Serial1.println(temp.rightMotorSpeed);
-    temp.rightMotorSpeed = (int)((float)temp.rightMotorSpeed * MotorCorrectionFactor);
-
-    motors.setSpeeds(temp.leftMotorSpeed,temp.rightMotorSpeed);
-
-  // float motorcali = calibrateMotor(motors,350,encodersObject);
-  // Serial1.println(motorcali,30);
   }
+
+
+  if (temp.currentColor != 'n') {
+    for (short i=4; i>0; i--) {
+    stateStorageStructObject.currentColor[i] = stateStorageStructObject.currentColor[i-1];
+    }
+    stateStorageStructObject.currentColor[0] = temp.currentColor;
+  }
+
+  //Serial1.println(temp.rightMotorSpeed);
+  temp.rightMotorSpeed = (int)((float)temp.rightMotorSpeed * MotorCorrectionFactor);
+
+  motors.setSpeeds(temp.leftMotorSpeed,temp.rightMotorSpeed);
+
 }
 
 void calibrateSensors()

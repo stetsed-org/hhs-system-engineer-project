@@ -28,4 +28,10 @@ struct pathFindingData{
   char currentColor;
 };
 
+enum class lineColor {
+  Black,
+  Green,
+  Brown
+};
+
 #endif

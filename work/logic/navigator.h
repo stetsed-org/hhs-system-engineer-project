@@ -18,9 +18,11 @@ int turnSpeedLeft = -2000;
 int turnSpeedRight = 4000;
 
 public:
-  pathFindingData pathFindingBlack(sensorStruct*, int,int*,int);
+  // pathFindingData pathFindingBlack(sensorStruct*, int,int*,int);
+  // pathFindingData pathFindingGreen(sensorStruct*, int,int*,int);
   pathFindingData pathFindingTurn(sensorStruct*);
-  pathFindingData pathFindingGreen(sensorStruct*, int,int*,int);
+
+  pathFindingData pathFindingOnColor(lineColor, sensorStruct*, int, int*);
 };
 
 #include "navigator.cpp"
