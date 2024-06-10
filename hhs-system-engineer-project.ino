@@ -74,7 +74,7 @@ void setup() {
   // sensorStructObject.magnetometerPointer = &magnetometerObject;
   // sensorStructObject.accelerometerPointer = &accelerometerObject; 
 
-  Serial.println();
+  //Serial.println();
 
   calibrateSensors(); 
 
@@ -163,7 +163,7 @@ if (readyRightForReal && lineSensorValues[4]> 750){
 else if((millis()- rightDetectTime) >= 2000 && rightDetectTime != 0){
   rightDetectTime = 0;
   readyRight = 0;
-  readyRight = 0;
+  readyRightForReal = 0;
 }
 
 //new end
@@ -180,9 +180,9 @@ void calibrateSensors()
   // Wait 1 second and then begin automatice not ignored as it ought to be sensor calibration
   // by rotating in place to sweep the sensors over the line
   delay(1000);
-  for(uint16_t i = 0; i < 120; i++)
+  for(uint16_t i = 0; i < 200; i++)
   {
-    if (i > 30 && i <= 90)
+    if (i > 50 && i <= 150)
     {
       motors.setSpeeds(-200, 200);
     }

@@ -50,7 +50,7 @@ int linesensors::readLine_but_good_and_not_colour_blind(unsigned int *sensor_val
             value = 1000-value;
 
         // keep track of whether we see the line at all
-        if(value > 130) {
+        if(value > 75) {
             on_line = 1;
         }
 

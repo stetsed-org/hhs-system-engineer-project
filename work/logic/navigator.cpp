@@ -11,12 +11,12 @@ char colorDetection(sensorStruct* sensorStructPointer, int* lineSensorValues){
     //Serial1.println((String)value);
     //Serial1.println("Value: " + (String)value);
 
-    if ((75 < value) && (value < 300)){
+    if ((75 < value) && (value < 200)){
         //Serial1.println("Color is green?");
         return 'g';
     }
 
-    else if (value > 300) {
+    else if (value > 600) {
       return 'b';
     }
     return 'n';
@@ -97,7 +97,6 @@ pathFindingData navigator::pathFindingOnColor(lineColor color, sensorStruct* sen
 
   //speedDiffrence /= 5;
   pathFindingDataInstance.currentError = error;
-
   pathFindingDataInstance.leftMotorSpeed = maxSpeed - X + map(speedDiffrence, -800, 800, -X, X);
   pathFindingDataInstance.rightMotorSpeed = maxSpeed - X + map(-speedDiffrence, -800, 800, -X, X); 
   
