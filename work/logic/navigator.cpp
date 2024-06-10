@@ -31,21 +31,24 @@ pathFindingData navigator::pathFindingOnColor(lineColor color, sensorStruct* sen
   // Reading the lineSensor's with readLine which returns a value between 0-4000
   int position = sensorStructObject -> lineSensorPointer -> readLine_but_good_and_not_colour_blind(lineSensorValues);
 
+
   switch (color) {
     case lineColor::Black:
-      if (lineSensorValues[0] > 800 && !TL) {TL = true; lastLeft = currentTime;}
-      if (lineSensorValues[4] > 800 && !TR) {TR = true; lastRight = currentTime;}
       X = 110;
       maxSpeed = 350;
+      howLongReset = 200;
       break;
     
     case lineColor::Green:
-      if ((lineSensorValues[0] > 75) && !TL) {TL = true; lastLeft = currentTime;}
-      if ((lineSensorValues[4] > 75) && !TR) {TR = true; lastRight = currentTime;}
       X = 75;
       maxSpeed = 200;
+      howLongReset = 400;
       break;
   }
+
+  if ((lineSensorValues[0] > 125) && !TL) {TL = true; lastLeft = currentTime;}
+  if ((lineSensorValues[4] > 125) && !TR) {TR = true; lastRight = currentTime;}
+
   //we have detetectd a turn, we are on a line, the reset time has pased, we detected a turn
   if (TL && position > 0 && (currentTime - lastLeft) > howLongReset && lastLeft != 0 ){
     TL = false;
