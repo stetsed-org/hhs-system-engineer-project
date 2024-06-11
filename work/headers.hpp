@@ -1,9 +1,11 @@
-#ifndef HEADERS_HPP 
-#define HEADERS_HPP 
+#ifndef HEADERS_HPP
+#define HEADERS_HPP
+
 #include <Arduino.h>
 #include <Wire.h>
 #include <Zumo32U4.h>
 #include <string.h>
+
 #include "serial/serial.cpp"
 
 // Include Sensor Base Class
@@ -30,5 +32,8 @@
 
 // Include Logic Classes
 #include "logic/navigator.h"
+
+// Include Motor Controller class
+#include "motor/MotorController.h"
 
 #endif
