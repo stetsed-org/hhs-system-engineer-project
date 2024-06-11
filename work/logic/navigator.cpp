@@ -11,14 +11,29 @@ char colorDetection(sensorStruct* sensorStructPointer, int* lineSensorValues){
     //Serial1.println((String)value);
     //Serial1.println("Value: " + (String)value);
 
-    if ((75 < value) && (value < 200)){
+    if ((75 < value) && (value < 175)){
         //Serial1.println("Color is green?");
         return 'g';
     }
 
-    else if (value > 600) {
+    else if (value > 700 && value < 800){
+      int BrownState = 0;
+      for (int i = 0; i < 5; ++i){
+        if(lineSensorValues[i] > 420 && lineSensorValues[i] < 810){
+          BrownState++;
+        }
+      }
+      if (BrownState > 3){
+        return 'r';
+      }
+      else{
+        return 'n';
+      }
+    }
+    else if (value > 900) {
       return 'b';
     }
+
     return 'n';
   }
 
@@ -30,8 +45,7 @@ pathFindingData navigator::pathFindingOnColor(lineColor color, sensorStruct* sen
   static bool LineGoneLeft, LineGoneRight;
   static int turnTimeLeft, turnTimeRight;
   // Reading the lineSensor's with readLine which returns a value between 0-4000
-  int position = sensorStructObject -> lineSensorPointer -> readLine_but_good_and_not_colour_blind(lineSensorValues);
-
+  int position = sensorStructObject -> lineSensorPointer -> readLine_but_good_and_not_colour_blind(lineSensorValues, 1);
 
   switch (color) {
     case lineColor::Black:
@@ -44,7 +58,7 @@ pathFindingData navigator::pathFindingOnColor(lineColor color, sensorStruct* sen
     case lineColor::Green:
       X = 75;
       maxSpeed = 200;
-      howLongReset = 600;
+      howLongReset = 300;
       mincolour = 125;
       break;
   }
@@ -64,11 +78,11 @@ pathFindingData navigator::pathFindingOnColor(lineColor color, sensorStruct* sen
 
   if (position == -4200){ //it's not on line
       position = 1000; 
-      if (TR && !LineGoneLeft) turnTimeLeft = currentTime;
-      LineGoneLeft = true; 
+      if (TR && !LineGoneLeft) turnTimeLeft = currentTime, LineGoneLeft = true;
+      
 
-      if (TL && !LineGoneRight) turnTimeRight = currentTime;
-      LineGoneRight = true; 
+      if (TL && !LineGoneRight) turnTimeRight = currentTime, LineGoneRight = true; 
+      
 
       if(TL && !TR) {
         position = turnSpeedLeft;
@@ -93,7 +107,7 @@ pathFindingData navigator::pathFindingOnColor(lineColor color, sensorStruct* sen
   int derivitave = 1;
 
   //PD
-  int speedDiffrence = error * proportional + derivitave * ((error - lastError));
+  int speedDiffrence = error * proportional + derivitave * (error - lastError);
 
   //speedDiffrence /= 5;
   pathFindingDataInstance.currentError = error;
@@ -102,6 +116,32 @@ pathFindingData navigator::pathFindingOnColor(lineColor color, sensorStruct* sen
   
   pathFindingDataInstance.currentColor = colorDetection(sensorStructObject, lineSensorValues);
   return pathFindingDataInstance;
+}
+
+bool navigator::bonkthebox(sensorStruct* sensorStructPointer, Zumo32U4Motors* motorPointer,int* lineSensorValues ){
+  if (!bonkHasRan){
+    motorPointer -> setSpeeds(200,200);
+    delay(1500);
+    motorPointer -> setSpeeds(0,0);
+    bonkHasRan = false;
+
+  }
+  
+  while (true) {
+    bool read = sensorStructPointer ->proximitySensorPointer ->read();
+    sensorStructPointer ->lineSensorPointer ->readLine(lineSensorValues);
+    if (lineSensorValues[2] > 20){
+      return true;
+    }
+    if (read){
+      Serial1.println("BONK IT");
+      motorPointer -> setSpeeds(250,250);
+      }
+    else{
+      Serial1.println("Enemy not spotted");
+      motorPointer -> setSpeeds(-250,250);
+    }
+  }
 }
 
 #endif // !NAVIGATOR_CPP

@@ -1,4 +1,4 @@
-bool debug = true;
+bool debug = false;
 
 #include <Arduino.h>
 #include <stdarg.h>
@@ -23,6 +23,8 @@ bool readyRightForReal = false;
 long rightDetectTime = 0;
 long leftDetectTime = 0;
 
+bool Finished = false;
+
 #define RECHTS OCR1A
 #define LINKS OCR1B
 
@@ -40,12 +42,15 @@ Zumo32U4Motors motors;
 navigator NavigatorInstance;
 
 
+Zumo32U4ButtonA buttonA;
 Zumo32U4ButtonB buttonB;
+Zumo32U4ButtonC buttonC;
 
 stateStorageStruct stateStorageStructObject;
 
 // Algemene setup
 void setup() {
+  delay(10000);
   Wire.begin();
 
   Serial1.begin(57600);
@@ -74,6 +79,8 @@ void setup() {
   // sensorStructObject.magnetometerPointer = &magnetometerObject;
   // sensorStructObject.accelerometerPointer = &accelerometerObject; 
 
+
+  sensorStructObject.lineSensorPointer ->emittersOn();
   //Serial.println();
 
   calibrateSensors(); 
@@ -82,29 +89,46 @@ void setup() {
   stateStorageStructObject.rightTurnActive = false;
 };
 
-void loop() {  
+void loop() {
+  if (buttonA.getSingleDebouncedPress()){
+    Finished = !Finished;
+    calibrateSensors();
+    delay(5000);
+  }
+  while (!Finished){
+  if (buttonA.getSingleDebouncedPress()){
+    Finished = !Finished;
+  }
   // Serial1.println("Current Color State" + (String)stateStorageStructObject.currentColor);
   int blackCount = 0;
   int greenCount = 0;
+  int brownCount = 0;
   for(int i = 0; i < 10; ++i){
     //Serial1.print((String)i + " " + (String)stateStorageStructObject.currentColor[i] + " ");
       if (stateStorageStructObject.currentColor[i] == 'b'){
-          blackCount += 1;
+          blackCount++;
         }
       if (stateStorageStructObject.currentColor[i] == 'g'){
-          greenCount += 1;
+          greenCount ++;
         }
+      if (stateStorageStructObject.currentColor[i] == 'r'){
+          brownCount++;
+      }
     }
   //Serial1.println(" ");
 
   pathFindingData temp;
 
-  if (greenCount >= 6){
+  if (greenCount >= 8 && brownCount < 4){
     temp = NavigatorInstance.pathFindingOnColor(lineColor::Green, &sensorStructObject,lastErrorGreen,lineSensorValues);
  
     lastErrorGreen = temp.currentError;
   }
-
+  else if (brownCount >= 4){
+    NavigatorInstance.bonkthebox(&sensorStructObject,&motors,lineSensorValues);
+    Finished = true;
+    break;
+  }
   else{
     temp = NavigatorInstance.pathFindingOnColor(lineColor::Black, &sensorStructObject,lastErrorBlack,lineSensorValues);
     
@@ -119,7 +143,7 @@ void loop() {
     stateStorageStructObject.currentColor[0] = temp.currentColor;
   }
 //new start
-if ((lineSensorValues[0] < 300) && (200 < lineSensorValues[0])){
+if ((lineSensorValues[0] < 320) && (160 < lineSensorValues[0])){
   readyLeft++;
   if (readyLeft >= 5){
     readyLeftForReal = true;
@@ -127,7 +151,7 @@ if ((lineSensorValues[0] < 300) && (200 < lineSensorValues[0])){
   }
 }
 else readyLeft = 0;
-if ((lineSensorValues[4] < 300) && (160 < lineSensorValues[4])){
+if ((lineSensorValues[4] < 320) && (160 < lineSensorValues[4])){
   readyRight++;
   if (readyRight >= 5)
   readyRightForReal = true;
@@ -171,7 +195,8 @@ else if((millis()- rightDetectTime) >= 2000 && rightDetectTime != 0){
   temp.rightMotorSpeed = (int)((float)temp.rightMotorSpeed * MotorCorrectionFactor);
 
   motors.setSpeeds(temp.leftMotorSpeed,temp.rightMotorSpeed);
-
+  }
+  motors.setSpeeds(0,0);
 }
 
 void calibrateSensors()

@@ -8,6 +8,7 @@ private:
 bool TL = false;
 bool TR = false;
 bool LineGone = false;
+bool bonkHasRan = false;
 unsigned int lastTime = 0;
 unsigned int turnTime = 0;
 unsigned int lastLeft = 0;
@@ -23,6 +24,8 @@ public:
   pathFindingData pathFindingTurn(sensorStruct*);
 
   pathFindingData pathFindingOnColor(lineColor, sensorStruct*, int, int*);
+
+  bool bonkthebox(sensorStruct*,Zumo32U4Motors*,int*);
 };
 
 #include "navigator.cpp"
