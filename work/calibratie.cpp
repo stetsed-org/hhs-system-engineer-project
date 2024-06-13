@@ -7,13 +7,13 @@
 #include <string.h>
 
 
-/*
+/**
  Motor calibration function, takes in motor, speed and an instance of the compatible encoders(switch to sensorStruct later).
  Returns a float which is the offset which should be used inside of the motors.
 */
 float calibrateMotor(Zumo32U4Motors motor, int Speed, CompatibleEncoders encoder){
   
-  /*
+  /**
    Reset the encoder values, then set the motors to go at the wanted speed,
    read the encoders and turn off the motors then calculate the offset.
   */
@@ -34,7 +34,7 @@ float calibrateMotor(Zumo32U4Motors motor, int Speed, CompatibleEncoders encoder
   motor.setLeftSpeed(0);
   motor.setRightSpeed(0);
 
-  /* Calculates the offset by dividing whatever side is lower to get a number
+  /** Calculates the offset by dividing whatever side is lower to get a number
      between 0-1. Then makes this value negative if it's an offset for the rightside.
 
      If the left spins 10% faster, it will be 100 / 110 which is ~0.9 

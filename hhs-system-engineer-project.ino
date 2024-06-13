@@ -42,29 +42,22 @@ MotorController motorController;
 // Initialize Navigator
 navigator NavigatorInstance;
 
+stateStorageStruct stateStorageStructObject;
 
 Zumo32U4ButtonA buttonA;
 Zumo32U4ButtonB buttonB;
 Zumo32U4ButtonC buttonC;
 
 void setup() {
-  delay(10000);
-  stateStorageStruct stateStorageStructObject;
+  delay(10000); 
   
   // Algemene setup
   Wire.begin();
 
   Serial1.begin(57600);
-  // Serial1.println("Zumo Active, Serial1 Output");
   proxzumo.initFrontSensor();
   proximitySensorObject = proxSensor(&proxzumo);
 
-  //xbee.begin(57600);
-
-  Serial1.println();
-  
-  // xbee.begin(4800);
-  
   pinMode(A10, OUTPUT);
   pinMode(A9, OUTPUT);
   pinMode(16, OUTPUT);
@@ -84,10 +77,6 @@ void setup() {
   // sensorStructObject.magnetometerPointer = &magnetometerObject;
   // sensorStructObject.accelerometerPointer = &accelerometerObject; 
 
-
-  sensorStructObject.lineSensorPointer ->emittersOn();
-  //Serial.println();
-
   calibrateSensors(); 
 
   stateStorageStructObject.leftTurnActive = false;
@@ -95,6 +84,7 @@ void setup() {
 };
 
 void loop() {
+  // Allow for restarting/starting the program with buttonA including recalibration.
   if (buttonA.getSingleDebouncedPress()){
     Finished = !Finished;
     calibrateSensors();
@@ -104,12 +94,11 @@ void loop() {
   if (buttonA.getSingleDebouncedPress()){
     Finished = !Finished;
   }
-  // Serial1.println("Current Color State" + (String)stateStorageStructObject.currentColor);
   int blackCount = 0;
   int greenCount = 0;
   int brownCount = 0;
+  // Count the current amount of a specific color in the array
   for(int i = 0; i < 10; ++i){
-    //Serial1.print((String)i + " " + (String)stateStorageStructObject.currentColor[i] + " ");
       if (stateStorageStructObject.currentColor[i] == 'b'){
           blackCount++;
         }
@@ -120,10 +109,9 @@ void loop() {
           brownCount++;
       }
     }
-  //Serial1.println(" ");
-
   pathFindingData temp;
 
+  // Run the logic as decided by what the count is of that color to avoid flip-flop condition
   if (greenCount >= 8 && brownCount < 4){
     temp = NavigatorInstance.pathFindingOnColor(lineColor::Green, &sensorStructObject,lastErrorGreen,lineSensorValues);
  
@@ -141,67 +129,21 @@ void loop() {
   }
 
 
+  // Assuming color isn't n which means can't decide it will move the array up by 1 and add the new to the start
   if (!(temp.currentColor == 'n')) {
     for (short i=9; i>0; i--) {
     stateStorageStructObject.currentColor[i] = stateStorageStructObject.currentColor[i-1];
     }
     stateStorageStructObject.currentColor[0] = temp.currentColor;
   }
-//new start
-if ((lineSensorValues[0] < 320) && (160 < lineSensorValues[0])){
-  readyLeft++;
-  if (readyLeft >= 5){
-    readyLeftForReal = true;
-    leftDetectTime = millis();
-  }
-}
-else readyLeft = 0;
-if ((lineSensorValues[4] < 320) && (160 < lineSensorValues[4])){
-  readyRight++;
-  if (readyRight >= 5)
-  readyRightForReal = true;
-  rightDetectTime = millis();
-}
-else readyRight = 0;
 
-if ( readyLeftForReal && lineSensorValues[0]> 750){
-  encodersObject.ResetValues();
-  while(encodersObject.getCountsRight() < (910)){
-    motors.setRightSpeed(350);
-    motors.setLeftSpeed(-200);
-  }
-  readyLeft = false;
-  readyLeftForReal = false;
-  leftDetectTime = 0;
-}
-else if((millis()- leftDetectTime) >= 2000 && leftDetectTime != 0){
-  leftDetectTime = 0;
-  readyLeft = 0;
-  readyLeftForReal = 0;
-}
-if (readyRightForReal && lineSensorValues[4]> 750){
-  encodersObject.ResetValues();
-  while(encodersObject.getCountsLeft() < (910)){
-    motors.setLeftSpeed(350);
-    motors.setRightSpeed(-200);
-  }
-  readyRight = false;
-  readyRightForReal = false;
-  rightDetectTime = 0;
-}
-else if((millis()- rightDetectTime) >= 2000 && rightDetectTime != 0){
-  rightDetectTime = 0;
-  readyRight = 0;
-  readyRightForReal = 0;
-}
-
-//new end
-  //Serial1.println(temp.rightMotorSpeed);
+  turnGrayLogic();
+ 
+  // Add the Correction factor to avoid drift.
   temp.rightMotorSpeed = (int)((float)temp.rightMotorSpeed * MotorCorrectionFactor);
 
   motors.setSpeeds(temp.leftMotorSpeed,temp.rightMotorSpeed);
   }
-  motors.setSpeeds(0,0);
 }
 
 void calibrateSensors()
@@ -224,4 +166,61 @@ void calibrateSensors()
     sensorStructObject.lineSensorPointer -> calibrate();
   }
   motors.setSpeeds(0, 0);
+}
+
+// Function to detect and turn when a gray line is detected on right or left
+void turnGrayLogic(){
+  // Check if we see 5 consecutive gray measurments on the left and then we know we need to make a left turn.
+  if ((lineSensorValues[0] < 320) && (160 < lineSensorValues[0])){
+    readyLeft++;
+    if (readyLeft >= 5){
+      readyLeftForReal = true;
+      leftDetectTime = millis();
+    }
+  }
+  else readyLeft = 0;
+  // Check if we see 5 consecutive gray measurments on the right and then we know we need to make a right turn.
+  if ((lineSensorValues[4] < 320) && (160 < lineSensorValues[4])){
+    readyRight++;
+    if (readyRight >= 5){
+      readyRightForReal = true;
+      rightDetectTime = millis();
+    }
+  }
+  else readyRight = 0;
+
+  // If we have the turn verified and the left detects a black line we turn hard left and then reset.
+  if ( readyLeftForReal && lineSensorValues[0]> 750){
+    encodersObject.ResetValues();
+    while(encodersObject.getCountsRight() < (910)){
+      motors.setRightSpeed(350);
+      motors.setLeftSpeed(-200);
+    }
+    readyLeft = false;
+    readyLeftForReal = false;
+    leftDetectTime = 0;
+  }
+  // If the turn detection was greater than 2 seconds ago we reset assuming it was an error.
+  else if((millis()- leftDetectTime) >= 2000 && leftDetectTime != 0){
+    leftDetectTime = 0;
+    readyLeft = 0;
+    readyLeftForReal = 0;
+  }
+  // If we have the turn verified and the right detects a black line we turn hard right and then reset.
+  if (readyRightForReal && lineSensorValues[4]> 750){
+    encodersObject.ResetValues();
+    while(encodersObject.getCountsLeft() < (910)){
+      motors.setLeftSpeed(350);
+      motors.setRightSpeed(-200);
+    }
+    readyRight = false;
+    readyRightForReal = false;
+    rightDetectTime = 0;
+  }
+  // If the turn detection was greater than 2 seconds ago we reset assuming it was an error.
+  else if((millis()- rightDetectTime) >= 2000 && rightDetectTime != 0){
+    rightDetectTime = 0;
+    readyRight = 0;
+    readyRightForReal = 0;
+  }
 }
