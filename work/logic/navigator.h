@@ -33,7 +33,7 @@ public:
   * and an int pointer which is an array of the lineSensorValues
   * which is read into, returns pathFindingData Struct.
   */
-  pathFindingData pathFindingOnColor(lineColor, sensorStruct*, int, int*);
+  pathFindingData pathFindingOnColor(lineColor, sensorStruct*, int, int*, SerialJSON*);
 
   /** Function that is used once brown line has been crossed to find the box,
   * and move it out of the circle and stop(return false) once it finishes.

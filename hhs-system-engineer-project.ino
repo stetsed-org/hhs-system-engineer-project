@@ -35,6 +35,8 @@ CompatibleEncoders encodersObject;
 linesensors lineSensorObject;
 sensorStruct sensorStructObject;
 
+SerialJSON* xbee = new SerialJSON;
+
 // Motors Setup
 Zumo32U4Motors motors;
 MotorController motorController;
@@ -50,11 +52,10 @@ Zumo32U4ButtonC buttonC;
 
 void setup() {
   delay(10000); 
-  
   // Algemene setup
   Wire.begin();
-
   Serial1.begin(57600);
+  
   proxzumo.initFrontSensor();
   proximitySensorObject = proxSensor(&proxzumo);
 
@@ -113,7 +114,7 @@ void loop() {
 
   // Run the logic as decided by what the count is of that color to avoid flip-flop condition
   if (greenCount >= 8 && brownCount < 4){
-    temp = NavigatorInstance.pathFindingOnColor(lineColor::Green, &sensorStructObject,lastErrorGreen,lineSensorValues);
+    temp = NavigatorInstance.pathFindingOnColor(lineColor::Green, &sensorStructObject,lastErrorGreen,lineSensorValues, xbee);
  
     lastErrorGreen = temp.currentError;
   }
@@ -123,7 +124,7 @@ void loop() {
     break;
   }
   else{
-    temp = NavigatorInstance.pathFindingOnColor(lineColor::Black, &sensorStructObject,lastErrorBlack,lineSensorValues);
+    temp = NavigatorInstance.pathFindingOnColor(lineColor::Black, &sensorStructObject,lastErrorBlack,lineSensorValues, xbee);
     
     lastErrorBlack = temp.currentError;
   }
@@ -143,6 +144,7 @@ void loop() {
   temp.rightMotorSpeed = (int)((float)temp.rightMotorSpeed * MotorCorrectionFactor);
 
   motors.setSpeeds(temp.leftMotorSpeed,temp.rightMotorSpeed);
+  xbee -> sendJSON();
   }
 }
 
@@ -162,7 +164,7 @@ void calibrateSensors()
     {
       motors.setSpeeds(200, -200);
     }
-
+    
     sensorStructObject.lineSensorPointer -> calibrate();
   }
   motors.setSpeeds(0, 0);

@@ -36,7 +36,7 @@ char colorDetection(sensorStruct* sensorStructPointer, int* lineSensorValues){
     return 'n';
   }
 
-pathFindingData navigator::pathFindingOnColor(lineColor color, sensorStruct* sensorStructObject, int lastError, int* lineSensorValues){
+pathFindingData navigator::pathFindingOnColor(lineColor color, sensorStruct* sensorStructObject, int lastError, int* lineSensorValues, SerialJSON* xbeePointer){
   // Instantiate the wanted variables, millis retrieves current time in milliseconds
   pathFindingData pathFindingDataInstance;
   unsigned long currentTime = millis();
@@ -46,6 +46,7 @@ pathFindingData navigator::pathFindingOnColor(lineColor color, sensorStruct* sen
   // Reading the lineSensor's with customized readLine function to return color values
   // that can be used inside of our program to differentiate White, Green, Black etc.
   int position = sensorStructObject -> lineSensorPointer -> readLine_but_good_and_not_colour_blind(lineSensorValues, 1);
+  xbeePointer ->addNewData("lineData",lineSensorValues, 5);
 
   // Set our variables depending on what color enum was given.
   switch (color) {
@@ -121,7 +122,7 @@ pathFindingData navigator::pathFindingOnColor(lineColor color, sensorStruct* sen
   int proportional = 2;
   int derivitave = 1;
   int speedDiffrence = error * proportional + derivitave * (error - lastError);
-
+  xbeePointer->addNewData("speedDifference", speedDiffrence);
   /* Set the return data to be the error to return as the currentError,
    * and map speeds to be a value we can use on the motors
    * speedDiffrence is decided by the PID and X is decided by color

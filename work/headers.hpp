@@ -6,6 +6,10 @@
 #include <Zumo32U4.h>
 #include <string.h>
 
+
+// Include Serial communication over JSON
+#include "JSON/SerialJSON.h"
+
 #include "serial/serial.cpp"
 
 // Include Sensor Base Class
@@ -35,5 +39,7 @@
 
 // Include Motor Controller class
 #include "motor/MotorController.h"
+
+
 
 #endif
