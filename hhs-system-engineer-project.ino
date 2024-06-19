@@ -118,11 +118,11 @@ void loop() {
  
     lastErrorGreen = temp.currentError;
   }
-  else if (brownCount >= 4){
-    NavigatorInstance.bonkthebox(&sensorStructObject,&motors,lineSensorValues);
-    Finished = true;
-    break;
-  }
+  // else if (brownCount >= 4){
+  //   NavigatorInstance.bonkthebox(&sensorStructObject,&motors,lineSensorValues);
+  //   Finished = true;
+  //   break;
+  // }
   else{
     temp = NavigatorInstance.pathFindingOnColor(lineColor::Black, &sensorStructObject,lastErrorBlack,lineSensorValues, xbee);
     
@@ -138,13 +138,15 @@ void loop() {
     stateStorageStructObject.currentColor[0] = temp.currentColor;
   }
 
-  turnGrayLogic();
+  //turnGrayLogic();
  
   // Add the Correction factor to avoid drift.
-  temp.rightMotorSpeed = (int)((float)temp.rightMotorSpeed * MotorCorrectionFactor);
+  //temp.rightMotorSpeed = (int)((float)temp.rightMotorSpeed * MotorCorrectionFactor);
 
-  motors.setSpeeds(temp.leftMotorSpeed,temp.rightMotorSpeed);
-  xbee -> sendJSON();
+  //motors.setSpeeds(temp.leftMotorSpeed,temp.rightMotorSpeed);
+  //xbee -> sendJSON();
+
+  Serial1.println(lineSensorValues[2]);
   }
 }
 

@@ -122,7 +122,7 @@ pathFindingData navigator::pathFindingOnColor(lineColor color, sensorStruct* sen
   int proportional = 2;
   int derivitave = 1;
   int speedDiffrence = error * proportional + derivitave * (error - lastError);
-  xbeePointer->addNewData("speedDifference", speedDiffrence);
+  //xbeePointer->addNewData("speedDifference", speedDiffrence);
   /* Set the return data to be the error to return as the currentError,
    * and map speeds to be a value we can use on the motors
    * speedDiffrence is decided by the PID and X is decided by color
